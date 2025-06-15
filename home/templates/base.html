@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CultureBridge | AI Cultural Translator</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+</head>
+<body>
+
+<!-- Floating Messages Container -->
+<div class="global-messages">
+    {% for message in messages %}
+    <div class="global-messages__alert global-messages__alert--{{ message.tags }}">
+      {{ message }}
+      <span class="global-messages__close">&times;</span>
+    </div>
+    {% endfor %}
+</div>
+{% block body %}
+
+{% endblock body %}
+</body>
+<script src="{% static 'scripts.js' %}"></script>  <!-- Fixed this line -->
+</html>

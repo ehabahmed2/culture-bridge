@@ -1,0 +1,356 @@
+{% extends "base.html" %}
+
+{% block body %}
+    <style>
+        /* Updated color scheme for solo founder */
+        :root {
+            --primary-color: #3a86ff;
+            --secondary-color: #ffbe0b;
+            --accent-color: #06d6a0;
+            --text-color: #1f2937;
+            --background-color: #f9fafb;
+            --card-bg: #ffffff;
+        }
+
+        .about-body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .about-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .about-section {
+            padding: 80px 0;
+        }
+
+        .about-section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .about-section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: 2px;
+        }
+
+        .about-section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 50px;
+            color: #4b5563;
+        }
+
+        /* Hero Section */
+        .about-hero {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+        }
+
+        .about-hero-title {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+        }
+
+        .about-hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            font-weight: 300;
+        }
+
+        .about-mission-statement {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px auto;
+            max-width: 700px;
+        }
+
+        /* Values Section */
+        .about-values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .about-value-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+            text-align: center;
+        }
+
+        .about-value-card:hover {
+            transform: translateY(-10px);
+        }
+
+        /* Founder Section */
+        .about-founder-card {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .about-founder-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            margin-bottom: 25px;
+        }
+
+        .about-founder-name {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .about-founder-title {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        /* Vision Section */
+        .about-vision-section {
+            background: linear-gradient(to bottom right, #f0f7ff, #e0f2fe);
+        }
+
+        .about-vision-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        /* Progress Section */
+        .about-progress-container {
+            max-width: 800px;
+            margin: 50px auto 0;
+        }
+
+        .about-progress-item {
+            margin-bottom: 40px;
+        }
+
+        .about-progress-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .about-progress-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(58, 134, 255, 0.1);
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+        }
+
+        .about-progress-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        /* CTA Section */
+        .about-cta {
+            text-align: center;
+            padding: 80px 0;
+        }
+
+        .about-cta-title {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .about-cta-subtitle {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 40px;
+            color: #4b5563;
+        }
+
+        .about-cta-button {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .about-cta-button:hover {
+            transform: translateY(-5px);
+            background: #2563eb;
+        }
+
+        @media (max-width: 768px) {
+            .about-hero-title {
+                font-size: 2.5rem;
+            }
+            .about-section {
+                padding: 60px 0;
+            }
+        }
+    </style>
+    
+    <!-- Hero Section -->
+    <section class="about-hero">
+        <div class="about-container">
+            <div class="about-hero-content">
+                <h1 class="about-hero-title">Building Bridges Between Cultures</h1>
+                <p class="about-hero-subtitle">Where language meets understanding</p>
+                
+                <div class="about-mission-statement">
+                    <p>Cultural Bridge began with a simple belief: language should never be a barrier to human connection. My mission is to create technology that helps people communicate authentically across cultural boundaries.</p>
+                    <p>Right now, it's just me and this vision - but every great journey starts with a single step.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Values Section -->
+    <section class="about-section">
+        <div class="about-container">
+            <h2 class="about-section-title">What Guides Me</h2>
+            <p class="about-section-subtitle">The principles shaping this journey</p>
+            
+            <div class="about-values-grid">
+                <div class="about-value-card">
+                    <div class="about-value-icon">
+                        <i class="fas fa-globe-americas"></i>
+                    </div>
+                    <h3 class="about-value-title">Cultural Authenticity</h3>
+                    <p>Going beyond literal translations to capture the true essence of expressions and context.</p>
+                </div>
+                
+                <div class="about-value-card">
+                    <div class="about-value-icon">
+                        <i class="fas fa-hands-helping"></i>
+                    </div>
+                    <h3 class="about-value-title">Human Connection</h3>
+                    <p>Creating tools that foster genuine understanding between people.</p>
+                </div>
+                
+                <div class="about-value-card">
+                    <div class="about-value-icon">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <h3 class="about-value-title">Thoughtful Growth</h3>
+                    <p>Building intentionally with quality over speed.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Founder Section -->
+    <section class="about-section">
+        <div class="about-container">
+            <h2 class="about-section-title">The Person Behind the Vision</h2>
+            <p class="about-section-subtitle">One person passionate about connecting cultures</p>
+            
+            <div class="about-founder-card">
+                <div class="about-founder-image"></div>
+                <h3 class="about-founder-name">Ehab Ahmed</h3>
+                <p class="about-founder-title">Founder & Cultural Explorer</p>
+                <p>With a background in Python, Django, and prompt engineering, I started Cultural Bridge to solve the frustrations I experienced with traditional translation tools. What began as a personal project has grown into a mission to help people connect more authentically across cultural boundaries.</p>
+                <p>When I'm not working on this project, you'll find me exploring new technology stacks, improving my skills in web scraping and automation, or learning more about language, culture, and user-focused web development.</p>
+                
+                <div class="about-social-links" style="margin-top: 25px;">
+                    <a href="#" class="about-social-link"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" class="about-social-link"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="about-social-link"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vision Section -->
+    <section class="about-section about-vision-section">
+        <div class="about-container">
+            <h2 class="about-section-title">Where We're Headed</h2>
+            <p class="about-section-subtitle">The future I'm building toward</p>
+            
+            <div class="about-vision-content">
+                <p>While Cultural Bridge is currently in its early stages, the vision is ambitious: to become the most culturally-aware translation platform available.</p>
+                
+                <div class="about-progress-container">
+                    <div class="about-progress-item">
+                        <div class="about-progress-header">
+                            <div class="about-progress-icon">
+                                <i class="fas fa-compass"></i>
+                            </div>
+                            <h3 class="about-progress-title">Current Focus</h3>
+                        </div>
+                        <p>Refining core translation quality • Building foundational technology • Understanding user needs</p>
+                    </div>
+                    
+                    <div class="about-progress-item">
+                        <div class="about-progress-header">
+                            <div class="about-progress-icon">
+                                <i class="fas fa-mountain"></i>
+                            </div>
+                            <h3 class="about-progress-title">Next Milestones</h3>
+                        </div>
+                        <p>Expanding language support • Developing cultural context features • Creating community resources</p>
+                    </div>
+                    
+                    <div class="about-progress-item">
+                        <div class="about-progress-header">
+                            <div class="about-progress-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <h3 class="about-progress-title">Ultimate Dream</h3>
+                        </div>
+                        <p>To help millions bridge cultural gaps • Preserve linguistic diversity • Foster global understanding</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="about-cta">
+        <div class="about-container">
+            <h2 class="about-cta-title">Join the Journey</h2>
+            <p class="about-cta-subtitle">Be part of shaping this cultural bridge from the beginning</p>
+            <a href="{% url "home" %}" class="about-cta-button">Try the Translator</a>
+            <p style="margin-top: 20px; color: #6b7280;">or <a href="#" style="color: var(--primary-color); text-decoration: none;">Follow our progress</a></p>
+        </div>
+    </section>
+
+{% endblock body %}

@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+<div id="creditDashboard">
+    <div class="credit-header">
+        <h2>Your Translation Credits</h2>
+    </div>
+    
+    <div id="creditBalanceCard">
+        <h3>Available Credits</h3>
+        <div id="balanceValue">{{ credit.balance }}</div>
+        <p class="renewal-info">Credits renew daily at midnight UTC</p>
+        <p class="renewal-info">Last renewal: <span id="lastRenewal">{{ credit.last_renewal|date:"M d, Y H:i" }}</span></p>
+    </div>
+    
+    <div style="text-align: center;">
+        <button id="purchaseBtn">Buy More Credits</button>
+    </div>
+    
+    <h3 class="section-title">Transaction History</h3>
+    <table id="transactionTable">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in transactions %}
+            <tr>
+                <td>{{ transaction.created_at|date:"M d, Y H:i" }}</td>
+                <td class="{% if transaction.amount > 0 %}credit-positive{% else %}credit-negative{% endif %}">
+                    {% if transaction.amount > 0 %}+{% endif %}{{ transaction.amount }}
+                </td>
+                <td>{{ transaction.description }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3" style="text-align: center;">No transactions yet</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Purchase Modal -->
+{% comment %} <div id="purchaseModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Buy More Credits</h2>
+            <button class="close-modal">&times;</button>
+        </div>
+        <div class="packages-container">
+            <div class="credit-package" data-credits="100" data-price="1.99">
+                <div class="package-credits">100</div>
+                <div class="package-price">$1.99</div>
+                <div class="package-bonus">Standard</div>
+            </div>
+            <div class="credit-package" data-credits="500" data-price="7.99">
+                <div class="package-credits">500</div>
+                <div class="package-price">$7.99</div>
+                <div class="package-bonus">Save 20%</div>
+            </div>
+            <div class="credit-package" data-credits="1000" data-price="12.99">
+                <div class="package-credits">1000</div>
+                <div class="package-price">$12.99</div>
+                <div class="package-bonus">Save 35%</div>
+            </div>
+            <div class="credit-package" data-credits="2500" data-price="24.99">
+                <div class="package-credits">2500</div>
+                <div class="package-price">$24.99</div>
+                <div class="package-bonus">Save 50%</div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button id="confirmPurchase">Confirm Purchase</button>
+        </div>
+    </div>
+</div> {% endcomment %}
+
+{% endblock %}

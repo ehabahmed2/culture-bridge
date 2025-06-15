@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block body %}
+
+<head>
+    <title>Register | Culture Connect</title>
+</head>
+
+<body>
+    {% include "nav.html" %}
+    <div class="register-wrapper">
+        <div class="register-card">
+            <div class="register-header">
+                <h1 class="register-title">Create Account</h1>
+                <p class="register-subtitle">Join our cultural community</p>
+            </div>
+            
+            <form method='post' class="register-form" id="registerForm">
+                {% csrf_token %}
+
+                <!--just for fun-->
+                <div class="register-culture-selector">
+                    <div class="register-culture-option active" style="background-color: var(--culture-american);" data-culture="american" title="American"></div>
+                    <div class="register-culture-option" style="background-color: var(--culture-japanese);" data-culture="japanese" title="Japanese"></div>
+                    <div class="register-culture-option" style="background-color: var(--culture-egyptian);" data-culture="egyptian" title="Egyptian"></div>
+                    <div class="register-culture-option" style="background-color: var(--culture-indian);" data-culture="indian" title="Indian"></div>
+                    <div class="register-culture-option" style="background-color: var(--culture-brazilian);" data-culture="brazilian" title="Brazilian"></div>
+                </div>
+
+                <div class="register-form-group">
+                    <label for="registerFullname" class="register-label">Full name</label>
+                    {{ form.full_name }}
+
+                    {% if form.full_name.errors %}
+                        <div class="register-error">{{ form.full_name.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="register-form-group">
+                    <label for="registerUsername" class="register-label">Username</label>
+                    {{ form.username }}
+                    {% if form.username.errors %}
+                    <div class="register-error">{{ form.username.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="register-form-group">
+                    <label for="registerEmail" class="register-label">Email</label>
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                    <div class="register-error">{{ form.email.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="register-form-group">
+                    <label for="registerPassword" class="register-label">Password</label>
+                    <div class="register-password-container">
+                        {{ form.password1 }}
+                        <button type="button" class="register-toggle-password" aria-label="Toggle password visibility">Show</button>
+                    </div>
+                    {% if form.password1.errors %}
+                    <div class="register-error">{{ form.password1.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="register-form-group">
+                    <label for="registerConfirmPassword" class="register-label">Confirm Password</label>
+                    <div class="register-password-container">
+                        {{ form.password2 }}
+                        <button type="button" class="register-toggle-password" aria-label="Toggle password visibility">Show</button>
+                    </div>
+                    {% if form.password2.errors %}
+                    <div class="register-error">{{ form.password2.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+                <!-- Non-field errors (e.g., password mismatch) -->
+                {% if form.non_field_errors %}
+                <div class="register-error mb-4">
+                    {% for error in form.non_field_errors %}
+                    {{ error|striptags }}
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <button type="submit" class="register-submit-btn">Register</button>
+                
+                <div class="register-login-link">
+                    Already have an account? <a href="{% url "login" %}" class="register-login-link-text">Log in</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% include "footer.html" %}
+</body>
+{% endblock body %}

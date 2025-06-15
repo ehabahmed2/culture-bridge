@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block body %}
+
+<head>
+    <title>Update your info</title>
+</head>
+
+<body>
+    {% include "nav.html" %}
+    <div class="register-wrapper">
+        <div class="register-card">
+            <div class="register-header">
+                <h1 class="register-title">Update your information</h1>
+                {% if user.is_authenticated %}
+                <div class="credits-display mt-4 flex items-center justify-center bg-yellow-50 rounded-lg p-3">
+                    <i class="fas fa-coins text-yellow-500 text-xl mr-2"></i>
+                    <span class="text-lg font-bold text-gray-800">You have <span class="text-yellow-600">{{ user.credits }}</span> credits available</span>
+                    <a href="#" class="ml-2 px-3 py-1 text-sm bg-yellow-500 text-white rounded hover:bg-yellow-600 transition z-10 relative">
+                        Get More
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+            
+            <form method='post' class="register-form" id="registerForm">
+                {% csrf_token %}
+
+                <div class="register-form-group">
+                    <label for="registerFullname" class="register-label">Full name</label>
+                    {{ form.full_name }}
+                    {% if form.full_name.errors %}
+                        <div class="register-error">{{ form.full_name.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="register-form-group">
+                    <label for="registerUsername" class="register-label">Username</label>
+                    {{ form.username }}
+                    {% if form.username.errors %}
+                    <div class="register-error">{{ form.username.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="register-form-group">
+                    <label for="registerEmail" class="register-label">Email</label>
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                    <div class="register-error">{{ form.email.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+                
+                <!-- Non-field errors (e.g., password mismatch) -->
+                {% if form.non_field_errors %}
+                <div class="register-error mb-4">
+                    {% for error in form.non_field_errors %}
+                    {{ error|striptags }}
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <button type="submit" class="register-submit-btn">Update</button>
+            </form>
+        </div>
+    </div>
+    {% include "footer.html" %}
+</body>
+{% endblock body %}

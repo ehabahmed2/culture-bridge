@@ -1,0 +1,42 @@
+<nav class="bg-white shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+            <div class="flex items-center">
+                <div class="flex-shrink-0 flex items-center">
+                    <i class="fas fa-globe-americas text-2xl mr-2" style="color: var(--primary-color);"></i>
+                    <a href="{% url 'home' %}"><span class="text-xl font-bold text-gray-900">Culture<span class="text-gradient">Bridge</span></span></a>   
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <div class="hidden sm:ml-6 sm:flex sm:items-center">
+                    <a href="{% url 'about' %}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 transition">
+                        <i class="fas fa-info-circle mr-2"></i> About Us
+                    </a>
+                </div>
+                {% if not request.user.is_authenticated and request.path != '/user/register/' %}
+                <div class="hidden sm:ml-6 sm:flex sm:items-center">
+                    <a href="{% url 'register' %}" class="px-4 py-2 rounded-md text-sm font-medium bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:opacity-90 transition">
+                        Sign Up Free
+                    </a>
+                </div>
+                {% endif %}
+                
+                <!-- User profile and logout -->
+                {% if user.is_authenticated %}
+                <div class="flex items-center space-x-4">
+                    <a href="{% url 'user_info' %}" class="flex items-center px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 transition">
+                        <i class="fas fa-user-circle mr-2"></i> Profile info
+                    </a>
+                    <form action="{% url 'logout' %}" method="post" class="logout-form">
+                        {% csrf_token %}
+                        <button type="submit" class="flex items-center px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 transition">
+                            <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                        </button>
+                    </form>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</nav>

@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block body %}
+<head>
+    <title>Login | Culture Connect</title>
+</head>
+<body>
+    {% include "nav.html" %}
+    <div class="login-wrapper">
+        <div class="login-card">
+            <div class="login-header">
+                <h1 class="login-title">Welcome Back</h1>
+                <p class="login-subtitle">Sign in to your account</p>
+            </div>
+            
+
+
+            <form method="post" class="login-form" id="loginForm" action="{% url 'login' %}">
+                {% csrf_token %}
+                <div class="login-form-group">
+                    {{ form.username.label_tag }}  <!-- This now says "Email" -->
+                    {{ form.username }}  <!-- Renders as <input type="email"> -->
+                    {% if form.username.errors %}
+                        <div class="error">{{ form.username.errors }}</div>
+                    {% endif %}
+                </div>
+                
+
+                <div class="login-form-group">
+                    {{ form.password.label_tag }}
+                    <div class="login-password-container">
+                        {{ form.password }}
+                        <button type="button" class="login-toggle-password">Show</button>
+                    </div>
+                    {% if form.password.errors %}
+                        <div class="error">{{ form.password.errors }}</div>
+                    {% endif %}
+                    
+                </div>
+                
+                <div class="login-options">
+                    <label class="login-remember">
+                        {{ form.remember_me }}
+                        <span>Remember me</span>
+                    </label>
+                    <a href="£" class="login-forgot">Forgot password?</a>
+                </div>
+                
+                <button type="submit" class="login-submit-btn">Sign In</button>
+                
+                <div class="login-register-link">
+                    Don't have an account? <a href='{% url "register" %}' class="login-register-link-text">Register</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% include "footer.html" %}
+</body>
+{% endblock body %}
+
