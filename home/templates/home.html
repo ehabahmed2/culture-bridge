@@ -126,72 +126,139 @@
                         </button>
                     </div>
 
+
                     <div class="translation-result bg-gray-50 rounded-lg mt-8 p-6 border border-gray-200 relative">
-                        <div class="flex justify-between items-center mb-2">
+                        <div class="flex justify-between items-center mb-2" dir="auto">
                             <h3 class="text-lg font-semibold text-gray-700">Translated Output</h3>
-                            <button id="copy-btn" class="text-gray-500 hover:text-blue-600 transition-colors">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                                </svg>
-                            </button>
+                            <div class="flex items-center gap-2"> <!-- Wrap buttons in a flex container -->
+                                <button type="button" id="copy-btn" class="text-gray-500 hover:text-blue-600 transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                    </svg>
+                                </button>
+                                {% if user.is_authenticated %}
+                                <button 
+                                    type='button'
+                                    id="save-btn"
+                                    class="text-gray-500 hover:text-green-600 transition-colors"
+                                    title="Save to History">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                                    </svg>
+                                </button>
+                                {% endif %}
+                            </div>
                         </div>
-                        <p id="translation-output" class="text-gray-700">Your culturally adapted message will appear here...</p>
+                        <p id="translation-output" class="text-gray-700"  style="unicode-bidi: plaintext; text-align: start;">Your culturally adapted message will appear here...</p>
                         <div id="copy-success" class="absolute top-3 right-10 bg-green-100 text-green-800 text-xs px-2 py-1 rounded hidden">
                             Copied!
+                        </div>
+                        <div id="save-success" class="absolute top-3 right-24 bg-green-100 text-green-800 text-xs px-2 py-1 rounded hidden">
+                            Saved!
                         </div>
                     </div>
                 </div>
             </form>
         </div>
     </div>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Language group selection
-        const languageGroup = document.getElementById('language-group');
-        const dialectSelect = document.getElementById('dialect-select');
-        
-        languageGroup.addEventListener('change', function() {
-            // Hide all optgroups
-            document.querySelectorAll('optgroup').forEach(group => {
-                group.classList.add('hidden');
+
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Language group selection
+            const languageGroup = document.getElementById('language-group');
+            const dialectSelect = document.getElementById('dialect-select');
+            
+            languageGroup.addEventListener('change', function() {
+                // Hide all optgroups
+                document.querySelectorAll('optgroup').forEach(group => {
+                    group.classList.add('hidden');
+                });
+                
+                // Show selected language group
+                document.querySelector(`.${this.value}-group`).classList.remove('hidden');
+                
+                // Select first option in the group
+                const firstOption = document.querySelector(`.${this.value}-group option`);
+                if (firstOption) {
+                    dialectSelect.value = firstOption.value;
+                }
             });
             
-            // Show selected language group
-            document.querySelector(`.${this.value}-group`).classList.remove('hidden');
+            // Copy button functionality
+            const copyBtn = document.getElementById('copy-btn');
+            const copySuccess = document.getElementById('copy-success');
             
-            // Select first option in the group
-            const firstOption = document.querySelector(`.${this.value}-group option`);
-            if (firstOption) {
-                dialectSelect.value = firstOption.value;
-            }
-        });
-        
-        // Copy button functionality
-        const copyBtn = document.getElementById('copy-btn');
-        const copySuccess = document.getElementById('copy-success');
-        
-        copyBtn.addEventListener('click', function() {
-            const textToCopy = document.getElementById('translation-output').textContent;
-            
-            // Create temporary textarea for copying
-            const textarea = document.createElement('textarea');
-            textarea.value = textToCopy;
-            document.body.appendChild(textarea);
-            textarea.select();
-            
-            try {
-                document.execCommand('copy');
-                copySuccess.classList.remove('hidden');
-                setTimeout(() => copySuccess.classList.add('hidden'), 2000);
-            } catch (err) {
-                console.error('Copy failed:', err);
-            }
-            
-            document.body.removeChild(textarea);
-        });
-    });
-</script>
+            copyBtn.addEventListener('click', function() {
+                const textToCopy = document.getElementById('translation-output').textContent;
+                
+                // Create temporary textarea for copying
+                const textarea = document.createElement('textarea');
+                textarea.value = textToCopy;
+                document.body.appendChild(textarea);
+                textarea.select();
+                
+                try {
+                    document.execCommand('copy');
+                    copySuccess.classList.remove('hidden');
+                    setTimeout(() => copySuccess.classList.add('hidden'), 2000);
+                } catch (err) {
+                    console.error('Copy failed:', err);
+                }
+                
+                document.body.removeChild(textarea);
+            });
 
+            // NEW: Save translation functionality
+            const saveBtn = document.getElementById('save-btn');
+            if (saveBtn) {
+                saveBtn.addEventListener('click', async () => {
+                    const inputText = document.querySelector('textarea[name="text"]').value;
+                    const outputText = document.getElementById('translation-output').textContent;
+                    const targetCulture = dialectSelect.options[dialectSelect.selectedIndex].text;
+                    const saveSuccess = document.getElementById('save-success');
+                    
+                    // Only save if there's valid output
+                    if (!outputText || outputText === "Your culturally adapted message will appear here...") {
+                        return;
+                    }
+
+                    // Show saving indicator
+                    const originalSaveHTML = saveBtn.innerHTML;
+                    saveBtn.innerHTML = '<svg class="animate-spin h-5 w-5 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
+                    
+                    try {
+                        // Send save request to server
+                        const response = await fetch("{% url 'save_translation' %}", {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                            },
+                            body: JSON.stringify({
+                                input_text: inputText,
+                                output_text: outputText,
+                                target_culture: targetCulture
+                            })
+                        });
+                        
+                        if (response.ok) {
+                            // Show success message
+                            saveSuccess.classList.remove('hidden');
+                            setTimeout(() => saveSuccess.classList.add('hidden'), 3000);
+                        } else {
+                            console.error('Failed to save translation');
+                        }
+                    } catch (error) {
+                        console.error('Error saving translation:', error);
+                    } finally {
+                        // Reset save button
+                        saveBtn.innerHTML = originalSaveHTML;
+                    }
+                });
+            }
+        });
+    </script>
 
     
     {% include "footer.html" %}

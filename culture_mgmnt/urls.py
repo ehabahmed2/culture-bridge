@@ -23,4 +23,5 @@ urlpatterns = [
     path('user/', include('Users.urls')),
     path('about/', include('about.urls')),
     path('plans/', include('plans.urls')),
+    path('history/', include('t_history.urls')),
 ]

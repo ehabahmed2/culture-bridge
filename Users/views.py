@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model 
+from t_history.models import TransalationHistory
 # change from built in user to Custom user 
 User = get_user_model()
 
@@ -62,6 +63,9 @@ def user_info(request):
         login(request, current_user) # to log the user in again after saving info
         messages.success(request, "Your details were saved successfully!")
         return redirect('home')
-    return render(request, 'user-info.html', {'form': user_form})
+    
+    # get recent transalations for the user
+    recent_history = TransalationHistory.objects.filter(user=request.user).order_by('-timestamp')[:3] if request.user.is_authenticated else None
+    return render(request, 'user-info.html', {'form': user_form, 'recent_history': recent_history})
 
 
