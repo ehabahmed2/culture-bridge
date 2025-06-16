@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 
 {% block body %}
+{% load static %}
+
 {% include "nav.html" %}
     <style>
         /* Updated color scheme for solo founder */
@@ -285,7 +287,7 @@
             <p class="about-section-subtitle">One person passionate about connecting cultures</p>
             
             <div class="about-founder-card">
-                <div class="about-founder-image"></div>
+                <div class="about-founder-image"><img src="{% static 'images/ehab.jpg' %}"  style="border-radius: 50%;"></div>
                 <h3 class="about-founder-name">Ehab Ahmed</h3>
                 <p class="about-founder-title">Founder & Cultural Explorer</p>
                 <p>With a background in Python, Django, and prompt engineering, I started Cultural Bridge to solve the frustrations I experienced with traditional translation tools. What began as a personal project has grown into a mission to help people connect more authentically across cultural boundaries.</p>
@@ -293,7 +295,7 @@
                 
                 <div class="about-social-links" style="margin-top: 25px;">
                     <a href="www.linkedin.com/in/ehab-ahmed-9467741b3" class="about-social-link"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="https://ehabahmed0.pythonanywhere.com/" class="about-social-link"><i class="fab fa-twitter"></i></a>
+                    <a href="https://ehabahmed0.pythonanywhere.com/" class="about-social-link"><i class="fa fa-external-link"></i></a>
                     <a href="https://github.com/ehabahmed2" class="about-social-link"><i class="fab fa-github"></i></a>
                 </div>
             </div>
