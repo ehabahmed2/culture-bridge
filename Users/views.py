@@ -45,9 +45,17 @@ def login_user(request):
     return render(request, 'login.html', {'form': form})
 
 @login_required
-def logout_user(request):
+# handle issue log out issue with free attempts
+def logout_keep_free_attempts(request):
+    # 1) grab current tries (default to 10 if missing)
+    free = request.session.get('free_attempts', 10)
+    
+    # 2) perform the normal logout (this *clears* the session)
     logout(request)
-    messages.info(request, 'You logged out')
+    
+    #3) restore free attempts into the new empty session
+    request.session['free_attempts'] = free
+    
     return redirect('home')
 
 

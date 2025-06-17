@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from .transalator.transalator import TranslateEngine  # Relative import
 from t_history.models import TransalationHistory
@@ -6,6 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from Users.models import CustomUser 
 from django.db.models import F
+from django.contrib.auth import logout as django_logout
 
 
 import json
@@ -96,3 +97,4 @@ def save_translation(request):
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
     return JsonResponse({'status': 'error'}, status=405)
+
