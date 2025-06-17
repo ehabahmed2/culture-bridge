@@ -44,6 +44,8 @@ def login_user(request):
         form = loginForm()
     return render(request, 'login.html', {'form': form})
 
+
+
 @login_required
 # handle issue log out issue with free attempts
 def logout_keep_free_attempts(request):

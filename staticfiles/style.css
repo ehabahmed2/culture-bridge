@@ -42,11 +42,55 @@
     pointer-events: auto; /* Re-enable clicks for messages */
 
 }
-/* Navbar z-index fix */
+/* Navbar z-index ___________________*/
 nav.bg-white.shadow-sm {
   position: relative;
   z-index: 200; /* Higher than messages */
 }
+/* Add to your main CSS file */
+.mobile-menu {
+    transition: all 0.3s ease;
+    max-height: 0;
+    overflow: hidden;
+}
+
+.mobile-menu.active {
+    max-height: 500px; /* Adjust based on content height */
+}
+
+.signup-btn, .mobile-signup-btn {
+    display: inline-block;
+    padding: 8px 16px;
+    font-size: 0.875rem;
+}
+
+@media (max-width: 640px) {
+    .mobile-signup-btn {
+        display: block;
+        margin: 8px 12px;
+        text-align: center;
+        border-radius: 4px;
+    }
+}
+
+.text-gradient {
+    background: linear-gradient(90deg, var(--culture-american), var(--culture-indian));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Mobile menu button animation */
+.mobile-menu-btn .fa-bars {
+    transition: transform 0.3s ease;
+}
+
+.mobile-menu-btn.active .fa-bars {
+    transform: rotate(90deg);
+}
+
+
+
 
 
 .global-messages__close {
@@ -775,8 +819,14 @@ input.error {
     font-size: 3.5rem;
     font-weight: 700;
     margin: 20px 0;
-    color: var(--culture-american);
-    background: linear-gradient(135deg, var(--culture-american), var(--culture-indian));
+    background: linear-gradient(
+    135deg,
+    var(--culture-american),
+    var(--culture-indian)
+  );
+    -webkit-background-clip: text;
+
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }

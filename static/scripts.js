@@ -425,6 +425,32 @@ function setupSmoothScroll() {
   });
 }
 
+// Nav bar handler
+function navBar() {
+  const mobileMenuBtn = document.getElementById("mobile-menu-btn");
+  const mobileMenu = document.getElementById("mobile-menu");
+
+  if (mobileMenuBtn && mobileMenu) {
+    mobileMenuBtn.addEventListener("click", function () {
+      mobileMenu.classList.toggle("hidden");
+      mobileMenu.classList.toggle("active");
+      mobileMenuBtn.classList.toggle("active");
+    });
+  }
+
+  // Close menu when clicking outside
+  document.addEventListener("click", function (event) {
+    if (
+      !mobileMenu.contains(event.target) &&
+      !mobileMenuBtn.contains(event.target) &&
+      !mobileMenu.classList.contains("hidden")
+    ) {
+      mobileMenu.classList.add("hidden");
+      mobileMenu.classList.remove("active");
+      mobileMenuBtn.classList.remove("active");
+    }
+  });
+}
 // INITIALIZE EVERYTHING WHEN DOM LOADS
 document.addEventListener("DOMContentLoaded", function () {
   setupCultureSelection();
@@ -432,12 +458,13 @@ document.addEventListener("DOMContentLoaded", function () {
   setupErrorHandling();
   setupMessageDismissal();
   setupDebugHelpers();
-  setupTranslationForm(); // Add translation functionality
+  setupTranslationForm(); //  translation functionality
   setupCopyButton();
   setupSaveButton();
   setupShareMenu();
   setupLanguageGroups();
   setupSmoothScroll();
+  navBar();
 
   // Set Egyptian as default culture
   const egyptianPill = document.querySelector(
@@ -462,5 +489,3 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 });
-
-// Adding extra codes for the home page now, 6/17_____________________________________

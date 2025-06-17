@@ -64,11 +64,19 @@
                 <p class="mt-3 max-w-md mx-auto text-lg text-gray-500 sm:text-xl md:mt-5 md:max-w-3xl">
                     Transform your social media posts to resonate with any culture instantly using AI
                 </p>
+                {% if not user.is_authenticated %}
                 <div class="mt-10">
                     <a href="#translation-section" class="cta-pulse px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 md:py-4 md:text-lg md:px-10 transition-all">
                         Try Free Demo
                     </a>
                 </div>
+                {% else %}
+                <div class="mt-10">
+                    <a href="#translation-section" class="cta-pulse px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 md:py-4 md:text-lg md:px-10 transition-all">
+                        Translate now
+                    </a>
+                </div>
+                {% endif %}
             </div>
             
             <div class="globe-container mt-16">
