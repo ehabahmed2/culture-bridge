@@ -451,6 +451,29 @@ function navBar() {
     }
   });
 }
+
+// warn the user before unchecing the save_history
+function warnUser() {
+  const checkbox = document.getElementById("store_history_setting");
+
+  if (checkbox) {
+    checkbox.addEventListener("change", function () {
+      if (!this.checked) {
+        const confirmed = confirm(
+          "Unchecking this option will delete all your saved translation history. Are you sure you want to proceed?"
+        );
+
+        if (!confirmed) {
+          // Restore previous state after a slight delay
+          setTimeout(() => {
+            this.checked = true;
+          }, 0);
+        }
+      }
+    });
+  }
+}
+
 // INITIALIZE EVERYTHING WHEN DOM LOADS
 document.addEventListener("DOMContentLoaded", function () {
   setupCultureSelection();
@@ -465,6 +488,7 @@ document.addEventListener("DOMContentLoaded", function () {
   setupLanguageGroups();
   setupSmoothScroll();
   navBar();
+  warnUser();
 
   // Set Egyptian as default culture
   const egyptianPill = document.querySelector(

@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from .models import CustomUser
-
+from django.utils import timezone
 
 class loginForm(AuthenticationForm):
     # user the email instead of username
@@ -31,9 +31,21 @@ class loginForm(AuthenticationForm):
         })
 
 class RegisterForm(UserCreationForm):
+    store_history = forms.BooleanField(
+        required=False,
+        label="Save my translation history",
+        widget=forms.CheckboxInput(attrs={
+            'class': 'register-checkbox',
+            'id':    'store_history',
+        })
+    )
+    
+    
     class Meta:
         model = CustomUser
-        fields = ['username', 'email', 'full_name', 'password1', 'password2']
+        fields = ['username', 'email', 'full_name', 'password1', 'password2', 'store_history']
+        
+        
         
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -69,10 +81,24 @@ class RegisterForm(UserCreationForm):
             'placeholder': 'Confirm your password'
         })
 
+
+
 class UserUpdate(UserChangeForm):
+    
+    store_history = forms.BooleanField(
+        required=False,
+        widget=forms.CheckboxInput(attrs={
+            'class': 'mr-2',
+            'id': 'store_history_setting',
+            'onchange': 'return confirmUncheck(this);'  # inline handler
+        }),
+        label='Store my translation history'
+    )
     class Meta:
         model = CustomUser
-        fields = ['username', 'email', 'full_name']
+        fields = ['username', 'email', 'full_name', 'store_history']
+        
+        
         
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

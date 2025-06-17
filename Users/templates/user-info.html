@@ -80,6 +80,24 @@
                     <div class="register-error">{{ form.email.errors|striptags }}</div>
                     {% endif %}
                 </div>
+
+                <div class="privacy-setting">
+                    <h3>Privacy Settings</h3>
+                    <div class="flex items-center">
+                        {{ form.store_history }}  <!-- Use form field instead of manual input -->
+                        <label for="{{ form.store_history.id_for_label }}" class="ml-2">
+                            Store my translation history
+                        </label>
+                    </div>
+
+                    <p class="text-sm text-gray-500 mt-1">
+                    {% if user.store_history %}
+                        Last consented: {{ user.consent_date|date:"M d, Y" }}
+                    {% else %}
+                        Your translations are not being stored
+                    {% endif %}
+                    </p>
+                </div>
                 
                 <!-- Non-field errors (e.g., password mismatch) -->
                 {% if form.non_field_errors %}

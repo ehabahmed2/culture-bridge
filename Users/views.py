@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model 
 from t_history.models import TransalationHistory
+from django.utils import timezone
 # change from built in user to Custom user 
 User = get_user_model()
 
@@ -13,6 +14,13 @@ def register_user(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
+            store_history = form.cleaned_data.get('store_history', False)
+            # Create but don’t save yet
+            user = form.save(commit=False)
+            user.store_history = store_history
+            user.consent_date =timezone.now() if store_history else None
+            
+            # finally save all data 
             user = form.save()
             login(request, user)
             messages.success(request, 'Account created successfully!')
@@ -65,14 +73,29 @@ def logout_keep_free_attempts(request):
 @login_required
 def user_info(request):
     # get the logged in user
-    current_user = User.objects.get(id=request.user.id)
-    # get the details from current user and fill it in the form
+    current_user = request.user
     user_form = UserUpdate(request.POST or None, instance=current_user) 
-    if user_form.is_valid():
-        user_form.save()
-        login(request, current_user) # to log the user in again after saving info
-        messages.success(request, "Your details were saved successfully!")
-        return redirect('home')
+
+    if request.method == 'POST':
+        # get the details from current user and fill it in the form
+        if user_form.is_valid():
+
+            # get the checkout box for concent
+            store_history = user_form.cleaned_data.get('store_history', False)
+            #save new preference for store history
+            current_user.store_history = store_history
+            current_user.concent_date = timezone.now() if store_history else None
+            
+            # if user decided to not approve, delete transalations
+            if not store_history:
+                TransalationHistory.objects.filter(user=request.user).delete()
+            user_form.save()
+
+            messages.success(request, "Your details were saved successfully!")
+            return redirect('user_info')
+        else: 
+            user_form = UserUpdate(request.POST or None, instance=current_user) 
+
     
     # get recent transalations for the user
     recent_history = TransalationHistory.objects.filter(user=request.user).order_by('-timestamp')[:3] if request.user.is_authenticated else None

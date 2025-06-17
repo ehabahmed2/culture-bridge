@@ -72,6 +72,14 @@
                     <div class="register-error">{{ form.password2.errors|striptags }}</div>
                     {% endif %}
                 </div>
+                  <!-- Add privacy consent checkbox -->
+                <div class="privacy-consent">
+                    {{form.store_history}}
+                    <label for="store_history">
+                    I consent to having my translation history stored to improve my experience
+                    <span class="text-xs text-gray-500">(You can change this anytime in settings)</span>
+                    </label>
+                </div>
                 <!-- Non-field errors (e.g., password mismatch) -->
                 {% if form.non_field_errors %}
                 <div class="register-error mb-4">
