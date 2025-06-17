@@ -143,3 +143,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'Users.CustomUser'
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'  # Default
+
+SESSION_ENGINE = "django.contrib.sessions.backends.db"  # Or cached_db for better performance
+SESSION_COOKIE_AGE = 1209600  # 2 weeks in seconds
+SESSION_SAVE_EVERY_REQUEST = True  # Important for updating counts

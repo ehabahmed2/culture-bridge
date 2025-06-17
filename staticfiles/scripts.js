@@ -101,50 +101,84 @@ function setupTranslationForm() {
   });
 
   // Form submission handler
+
   const translationForm = document.getElementById("translation-form");
-  if (translationForm) {
-    translationForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
+  if (!translationForm) return;
 
-      const form = e.target;
-      const formData = new FormData(form);
-      const translateBtn = form.querySelector('button[type="submit"]');
-      const loader = form.querySelector(".loader");
-      const translateText = form.querySelector(".translate-btn-text");
-      const outputElement = document.getElementById("translation-output");
+  // grab the badge that shows “Credits” or “Free tries”
+  const creditsCounter = document.getElementById("credits-counter");
 
-      // Guard clause for required elements
-      if (!translateBtn || !loader || !translateText || !outputElement) return;
+  // find our button/text/loader inside the form
+  const translateBtn = translationForm.querySelector('button[type="submit"]');
+  const translateText = translateBtn.querySelector(".translate-btn-text");
+  const loader = translateBtn.querySelector(".loader");
 
-      // Show loading state
-      translateBtn.disabled = true;
-      loader.style.display = "block";
-      translateText.textContent = "Translating...";
-      outputElement.textContent = "Translating your message...";
+  // read auth state out of a data-attr since this file isn’t templated
+  // — make sure your <form> has: data-user-authenticated="{{ user.is_authenticated|yesno:"true,false" }}"
+  const userAuthenticated =
+    translationForm.dataset.userAuthenticated === "true";
 
-      try {
-        const response = await fetch("/translate/", {
-          method: "POST",
-          body: formData,
-        });
+  translationForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-        const result = await response.json();
+    // disable & spinner
+    translateBtn.disabled = true;
+    translateText.style.display = "none";
+    loader.style.display = "block";
 
-        if (result.success) {
-          outputElement.textContent = result.translation;
-        } else {
-          outputElement.textContent = `Error: ${result.error}`;
+    try {
+      // POST to the same URL your form normally does
+      const response = await fetch(translationForm.action, {
+        method: "POST",
+        body: new FormData(translationForm),
+      });
+      const data = await response.json();
+
+      // error or “need to register”?
+      if (!data.success) {
+        if (data.redirect) {
+          if (confirm("Free limit reached! Register now to continue.")) {
+            window.location.href = "/register/"; // or your {% url "register" %}
+          }
+        } else if (data.error) {
+          alert(`Error: ${data.error}`);
         }
-      } catch (error) {
-        outputElement.textContent = "Network error. Please try again.";
-      } finally {
-        // Reset button state
-        translateBtn.disabled = false;
-        loader.style.display = "none";
-        translateText.textContent = "Translate";
+        return;
       }
-    });
-  }
+
+      // SUCCESS: show translation
+      document.getElementById("translation-output").textContent =
+        data.translation;
+
+      // update the badge
+      if (data.remaining != null) {
+        if (data.user_authenticated) {
+          creditsCounter.textContent = `Credits: ${data.remaining}`;
+          creditsCounter.className =
+            "text-sm font-medium px-3 py-1 rounded-full bg-blue-100 text-blue-800";
+        } else {
+          creditsCounter.textContent = `Free tries: ${data.remaining}`;
+          if (data.remaining <= 0)
+            creditsCounter.className =
+              "text-sm font-medium px-3 py-1 rounded-full bg-red-100 text-red-800";
+          else if (data.remaining <= 3)
+            creditsCounter.className =
+              "text-sm font-medium px-3 py-1 rounded-full bg-yellow-100 text-yellow-800";
+          else
+            creditsCounter.className =
+              "text-sm font-medium px-3 py-1 rounded-full bg-green-100 text-green-800";
+        }
+      }
+    } catch (err) {
+      console.error("Translation error:", err);
+      alert("Network error. Please try again.");
+    } finally {
+      // restore button
+      translateText.style.display = "block";
+      loader.style.display = "none";
+      translateBtn.disabled = false;
+    }
+  });
 }
 
 /**
@@ -230,6 +264,167 @@ function setupDebugHelpers() {
   });
 }
 
+// 1. COPY BUTTON
+function setupCopyButton() {
+  const copyBtn = document.getElementById("copy-btn");
+  const copySuccess = document.getElementById("copy-success");
+  if (!copyBtn) return;
+
+  copyBtn.addEventListener("click", () => {
+    const textToCopy =
+      document.getElementById("translation-output").textContent;
+    const textarea = document.createElement("textarea");
+    textarea.value = textToCopy;
+    document.body.appendChild(textarea);
+    textarea.select();
+
+    try {
+      document.execCommand("copy");
+      copySuccess.classList.remove("hidden");
+      setTimeout(() => copySuccess.classList.add("hidden"), 2000);
+    } catch (e) {
+      console.error("Copy failed:", e);
+    } finally {
+      document.body.removeChild(textarea);
+    }
+  });
+}
+
+// 2 Save button
+function setupSaveButton() {
+  const saveBtn = document.getElementById("save-btn");
+  const saveSuccess = document.getElementById("save-success");
+  if (!saveBtn) return;
+  // read the actual URL from the data attribute
+  const saveUrl = saveBtn.dataset.saveUrl;
+
+  saveBtn.addEventListener("click", async () => {
+    // re-query dialectSelect here so it’s never undefined
+    const dialectSelect = document.getElementById("dialect-select");
+    if (!dialectSelect) {
+      console.error("dialect-select element not found");
+      return;
+    }
+
+    const inputText = document.querySelector('textarea[name="text"]').value;
+    const outputText =
+      document.getElementById("translation-output").textContent;
+    const targetCulture =
+      dialectSelect.options[dialectSelect.selectedIndex].text;
+
+    if (!outputText || outputText.startsWith("Your culturally")) return;
+
+    const originalHTML = saveBtn.innerHTML;
+    saveBtn.innerHTML = '<span class="loader"></span>';
+
+    try {
+      const response = await fetch(saveUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]")
+            .value,
+        },
+        body: JSON.stringify({
+          input_text: inputText,
+          output_text: outputText,
+          target_culture: targetCulture,
+        }),
+      });
+      if (response.ok) {
+        saveSuccess.classList.remove("hidden");
+        setTimeout(() => saveSuccess.classList.add("hidden"), 3000);
+      }
+    } catch (e) {
+      console.error("Save translation error", e);
+    } finally {
+      saveBtn.innerHTML = originalHTML;
+    }
+  });
+}
+
+// 3. SHARE MENU
+function setupShareMenu() {
+  const shareBtn = document.getElementById("share-btn");
+  const shareMenu = document.getElementById("share-menu");
+  if (!shareBtn || !shareMenu) return;
+
+  shareBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    shareMenu.style.display =
+      shareMenu.style.display === "block" ? "none" : "block";
+  });
+
+  document.querySelectorAll(".share-option").forEach((opt) => {
+    opt.addEventListener("click", () => {
+      const platform = opt.dataset.platform;
+      const text = document.getElementById("translation-output").textContent;
+      if (!text || text.startsWith("Your culturally")) return;
+
+      let url = "";
+      if (platform === "twitter")
+        url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+          text
+        )}`;
+      if (platform === "facebook")
+        url = `https://www.facebook.com/sharer/sharer.php?u=&quote=${encodeURIComponent(
+          text
+        )}`;
+      if (platform === "linkedin")
+        url = `https://www.linkedin.com/sharing/share-offsite/?url=&summary=${encodeURIComponent(
+          text
+        )}`;
+
+      window.open(url, "_blank", "width=600,height=400");
+      shareMenu.style.display = "none";
+    });
+  });
+
+  // close on outside click
+  document.addEventListener("click", (e) => {
+    if (!shareBtn.contains(e.target) && !shareMenu.contains(e.target)) {
+      shareMenu.style.display = "none";
+    }
+  });
+}
+
+// 4. LANGUAGE GROUPS (optgroup show/hide)
+function setupLanguageGroups() {
+  const languageGroup = document.getElementById("language-group");
+  const dialectSelect = document.getElementById("dialect-select");
+  if (!languageGroup || !dialectSelect) return;
+
+  languageGroup.addEventListener("change", () => {
+    document
+      .querySelectorAll("optgroup")
+      .forEach((g) => g.classList.add("hidden"));
+    const groupClass = `.${languageGroup.value}-group`;
+    document.querySelector(groupClass)?.classList.remove("hidden");
+
+    const firstOpt = document.querySelector(`${groupClass} option`);
+    if (firstOpt) dialectSelect.value = firstOpt.value;
+  });
+}
+
+function setupSmoothScroll() {
+  const ctaButton = document.querySelector(".cta-pulse");
+  if (!ctaButton) return;
+
+  ctaButton.addEventListener("click", function (e) {
+    if (this.getAttribute("href") !== "#translation-section") return;
+
+    e.preventDefault();
+    const target = document.getElementById("translation-section");
+    if (!target) return;
+
+    const headerOffset = 80;
+    const elementPosition = target.getBoundingClientRect().top;
+    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+    window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+  });
+}
+
 // INITIALIZE EVERYTHING WHEN DOM LOADS
 document.addEventListener("DOMContentLoaded", function () {
   setupCultureSelection();
@@ -238,6 +433,11 @@ document.addEventListener("DOMContentLoaded", function () {
   setupMessageDismissal();
   setupDebugHelpers();
   setupTranslationForm(); // Add translation functionality
+  setupCopyButton();
+  setupSaveButton();
+  setupShareMenu();
+  setupLanguageGroups();
+  setupSmoothScroll();
 
   // Set Egyptian as default culture
   const egyptianPill = document.querySelector(
@@ -262,3 +462,5 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 });
+
+// Adding extra codes for the home page now, 6/17_____________________________________

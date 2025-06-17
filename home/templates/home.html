@@ -95,10 +95,23 @@
     <!-- Translator Section -->
     <div id='translation-section' class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div class="bg-white rounded-xl shadow-xl overflow-hidden">
-            <form id="translation-form">
+            <form id="translation-form"
+            action="{% url 'translate' %}"
+            method="post"
+            data-user-authenticated="{{ user.is_authenticated|yesno:'true,false' }}"
+            >
                 {% csrf_token %}
                 <div class="p-6 sm:p-10">
                     <h2 class="text-2xl font-bold text-gray-800 mb-4">Translate Your Message Across Cultures</h2>
+                    <!-- Change to this simpler version -->
+                    <div id="credits-counter" class="text-sm font-medium px-3 py-1 rounded-full 
+                        {% if user.is_authenticated %}bg-blue-100 text-blue-800{% else %}bg-green-100 text-green-800{% endif %}">
+                        {% if user.is_authenticated %}
+                            Credits: {{ user.credits }}
+                        {% else %}
+                            Free tries: {{ request.session.free_attempts|default:10 }}
+                        {% endif %}
+                    </div>
                     <p class="text-gray-600 mb-6">Enter your original message, choose a language and dialect, and let AI adapt it to resonate with the audience.</p>
 
                     <textarea 
@@ -213,7 +226,9 @@
                                     type='button'
                                     id="save-btn"
                                     class="text-gray-500 hover:text-green-600 transition-colors"
-                                    title="Save to History">
+                                    title="Save to History"
+                                    data-save-url="{% url 'save_translation' %}"
+                                    >
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
                                     </svg>
@@ -271,8 +286,7 @@
 
 
     
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
+    {% comment %} <script>
             // // Smooth scroll for CTA button - FIXED
         const ctaButton = document.querySelector('.cta-pulse');
         if (ctaButton) {
@@ -446,9 +460,75 @@
                 window.open(url, '_blank', 'width=600,height=400');
             }
         }
+        
 
-        });
-    </script>
+
+
+            // Updated JS code
+            const translationForm    = document.getElementById('translation-form');
+            const creditsCounter     = document.getElementById('credits-counter');
+            const translateBtn       = translationForm.querySelector('button[type="submit"]');
+            const translateText      = translateBtn.querySelector('.translate-btn-text');
+            const loader             = translateBtn.querySelector('.loader');
+            const userAuthenticated  = {{ user.is_authenticated|yesno:"true,false" }};
+
+            translationForm.addEventListener('submit', async (e) => {
+              e.preventDefault();
+              // show spinner
+              translateText.style.display = 'none';
+              loader.style.display       = 'block';
+
+              try {
+                const response = await fetch('{% url "translate" %}', {
+                  method: 'POST',
+                  body:   new FormData(translationForm),
+                });
+
+                // always parse JSON
+                const data = await response.json();
+
+                // error or redirect?
+                if (!data.success) {
+                  if (data.redirect) {
+                    if (confirm("You've used all free attempts! Register now to continue.")) {
+                      window.location.href = '{% url "register" %}';
+                    }
+                  } else if (data.error) {
+                    alert(`Error: ${data.error}`);
+                  }
+                  return;
+                }
+
+                // success: show translation
+                document.getElementById('translation-output').textContent = data.translation;
+
+                // update credits/tries
+                if (data.hasOwnProperty('remaining')) {
+                  if (data.user_authenticated) {
+                    creditsCounter.textContent = `Credits: ${data.remaining}`;
+                    creditsCounter.className   = 'text-sm font-medium px-3 py-1 rounded-full bg-blue-100 text-blue-800';
+                  } else {
+                    creditsCounter.textContent = `Free tries: ${data.remaining}`;
+                    if (data.remaining <= 0) {
+                      creditsCounter.className = 'text-sm font-medium px-3 py-1 rounded-full bg-red-100 text-red-800';
+                    } else if (data.remaining <= 3) {
+                      creditsCounter.className = 'text-sm font-medium px-3 py-1 rounded-full bg-yellow-100 text-yellow-800';
+                    } else {
+                      creditsCounter.className = 'text-sm font-medium px-3 py-1 rounded-full bg-green-100 text-green-800';
+                    }
+                  }
+                }
+
+              } catch (err) {
+                console.error('Translation error:', err);
+                alert('Network error. Please try again.');
+              } finally {
+                // hide spinner
+                translateText.style.display = 'block';
+                loader.style.display       = 'none';
+              }
+            });
+    </script> {% endcomment %}
 
     
     {% include "footer.html" %}
