@@ -1111,3 +1111,33 @@ input.error {
     padding: 8px 20px;
     border-radius: 6px;
 }
+
+
+
+
+
+
+
+/* Save Consent Message */
+.save-consent-message {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    top: 70px;
+}
+
+.save-consent-message.active {
+    display: block;
+    opacity: 1;
+}
+
+.save-consent-message:after {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    right: 20px;
+    border-width: 8px;
+    border-style: solid;
+    border-color: transparent transparent white transparent;
+}
+

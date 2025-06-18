@@ -8,4 +8,5 @@ urlpatterns = [
     path('register/', views.register_user, name='register'),
     path('login/', views.login_user, name='login'),
     path('user-info/', views.user_info, name='user_info'),
+    path('enable_history/', views.enable_history_storage, name='enable_history_storage'),
 ]

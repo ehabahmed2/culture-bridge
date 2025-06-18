@@ -474,6 +474,113 @@ function warnUser() {
   }
 }
 
+// Only one getApproval function
+
+function getApproval() {
+  const saveBtn = document.getElementById("save-btn");
+  const consentMessage = document.getElementById("save-consent-message");
+
+  if (saveBtn && consentMessage) {
+    // Get the close button from within the consent message
+    const closeBtn = consentMessage.querySelector(".save-consent-close");
+
+    saveBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+
+      const storeHistory = this.dataset.storeHistory === "true";
+      if (!storeHistory) {
+        consentMessage.classList.remove("hidden");
+        consentMessage.classList.add("active");
+      }
+    });
+
+    if (closeBtn) {
+      closeBtn.addEventListener("click", async function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        try {
+          // Get CSRF token from cookie
+          function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== "") {
+              const cookies = document.cookie.split(";");
+              for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === name + "=") {
+                  cookieValue = decodeURIComponent(
+                    cookie.substring(name.length + 1)
+                  );
+                  break;
+                }
+              }
+            }
+            return cookieValue;
+          }
+
+          const csrfToken = getCookie("csrftoken");
+
+          const response = await fetch(urls.enableHistoryStorage, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRFToken": csrfToken,
+            },
+            body: JSON.stringify({}),
+          });
+
+          if (response.ok) {
+            // Update the UI immediately
+            saveBtn.dataset.storeHistory = "true";
+
+            // Show success message
+            const successMsg = document.createElement("div");
+            successMsg.className =
+              "fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded-md shadow-lg";
+            successMsg.textContent = "History storage enabled successfully!";
+            document.body.appendChild(successMsg);
+
+            // Remove after 3 seconds
+            setTimeout(() => {
+              successMsg.remove();
+            }, 3000);
+
+            // Close the consent message
+            consentMessage.classList.remove("active");
+            consentMessage.classList.add("hidden");
+          } else {
+            throw new Error(await response.text());
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          // Show error message
+          const errorMsg = document.createElement("div");
+          errorMsg.className =
+            "fixed bottom-4 right-4 bg-red-500 text-white px-4 py-2 rounded-md shadow-lg";
+          errorMsg.textContent = "Failed to enable history storage";
+          document.body.appendChild(errorMsg);
+
+          setTimeout(() => {
+            errorMsg.remove();
+          }, 3000);
+        }
+      });
+    }
+
+    // Close message when clicking outside
+    document.addEventListener("click", function (e) {
+      if (
+        !consentMessage.contains(e.target) &&
+        e.target !== saveBtn &&
+        consentMessage.classList.contains("active")
+      ) {
+        consentMessage.classList.remove("active");
+        consentMessage.classList.add("hidden");
+      }
+    });
+  }
+}
+
 // INITIALIZE EVERYTHING WHEN DOM LOADS
 document.addEventListener("DOMContentLoaded", function () {
   setupCultureSelection();
@@ -489,6 +596,7 @@ document.addEventListener("DOMContentLoaded", function () {
   setupSmoothScroll();
   navBar();
   warnUser();
+  getApproval();
 
   // Set Egyptian as default culture
   const egyptianPill = document.querySelector(

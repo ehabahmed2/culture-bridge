@@ -2,9 +2,13 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
 from django.contrib.auth import get_user_model 
 from t_history.models import TransalationHistory
 from django.utils import timezone
+
+
 # change from built in user to Custom user 
 User = get_user_model()
 
@@ -102,3 +106,15 @@ def user_info(request):
     return render(request, 'user-info.html', {'form': user_form, 'recent_history': recent_history})
 
 
+
+
+@login_required
+@require_POST
+def enable_history_storage(request):
+    try:
+        request.user.store_history = True
+        request.user.consent_date = timezone.now()
+        request.user.save()
+        return JsonResponse({'status': 'success'})
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
