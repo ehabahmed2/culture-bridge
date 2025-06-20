@@ -17,7 +17,7 @@ def home(request):
         # Set to 10 if it doesn't exist or is invalid
         if 'free_attempts' not in request.session or not isinstance(request.session['free_attempts'], int):
             request.session['free_attempts'] = 10
-    return render(request, 'home.html')
+    return render(request, 'home.html', context={})
 
 def translate_view(request):
     if request.method == 'POST':
@@ -97,4 +97,6 @@ def save_translation(request):
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
     return JsonResponse({'status': 'error'}, status=405)
+
+
 

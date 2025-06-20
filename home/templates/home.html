@@ -117,7 +117,7 @@
                         {% if user.is_authenticated %}
                             Credits: {{ user.credits }}
                         {% else %}
-                            Free tries: {{ request.session.free_attempts|default:10 }}
+                            Free tries: {{ request.session.free_attempts }}
                         {% endif %}
                     </div>
                     <p class="text-gray-600 mb-6">Enter your original message, choose a language and dialect, and let AI adapt it to resonate with the audience.</p>

@@ -138,7 +138,7 @@ function setupTranslationForm() {
       if (!data.success) {
         if (data.redirect) {
           if (confirm("Free limit reached! Register now to continue.")) {
-            window.location.href = "/register/"; // or your {% url "register" %}
+            window.location.href = "/user/register/"; // or your {% url "register" %}
           }
         } else if (data.error) {
           alert(`Error: ${data.error}`);
