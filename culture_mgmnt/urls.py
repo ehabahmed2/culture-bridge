@@ -26,4 +26,5 @@ urlpatterns = [
     path('about/', include('about.urls')),
     path('plans/', include('plans.urls')),
     path('history/', include('t_history.urls')),
+    path('feedback/', include('feedback.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

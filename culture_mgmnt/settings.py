@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'about.apps.AboutConfig',
     'plans.apps.PlansConfig',
     't_history.apps.THistoryConfig',
+    'feedback.apps.FeedbackConfig',
 ]
 
 MIDDLEWARE = [
