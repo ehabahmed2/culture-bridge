@@ -66,6 +66,7 @@ function setupCultureSelection() {
  * Handles translation form submission and enhances culture selection
  */
 function setupTranslationForm() {
+  console.log("🛠️ setupTranslationForm initialized");
   // Set default culture colors if not already defined
   const root = document.documentElement;
   const computedStyles = getComputedStyle(root);
@@ -169,13 +170,17 @@ function setupTranslationForm() {
         }
       }
 
+      // 5) Decide if we should pop up the feedback modal
       const isBad = data.confidence != null && data.confidence < 0.5;
-      if (data.success && shouldAskFeedback(isBad)) {
+      console.log("🟢 shouldAskFeedback:", shouldAskFeedback(isBad));
+      if (shouldAskFeedback(isBad)) {
+        console.log("🔔 showing feedback popup now");
         const inputText = document.querySelector('textarea[name="text"]').value;
         const outputText = data.translation;
         const dialect = document.querySelector('select[name="dialect"]').value;
         showFeedbackPopup(inputText, outputText, dialect);
       }
+      // ───────────────────────────────────────────
     } catch (err) {
       console.error("Translation error:", err);
       alert("Network error. Please try again.");
@@ -590,8 +595,14 @@ function getApproval() {
 
 // Feedback pop out
 function showFeedbackPopup(inputText, outputText, dialect) {
+  console.log("🔔 showFeedbackPopup called"); // <-- add this too
   const popup = document.getElementById("feedback-popup");
+  if (!popup) {
+    console.error("❌ No #feedback-popup container in DOM");
+    return;
+  }
   popup.classList.remove("hidden");
+  // … reset stars/comments …
 
   // Reset UI
   popup.querySelectorAll(".rating-star").forEach((star) => {
@@ -691,36 +702,53 @@ function feedbackFunction() {
     });
 
   // Show feedback popup occasionally after translation
+  const optOutCheckbox = popup.querySelector("#dont-ask-again");
+  if (optOutCheckbox) {
+    optOutCheckbox.addEventListener("change", (e) => {
+      // Persist their choice forever
+      localStorage.setItem("feedbackOptOut", e.target.checked);
+    });
+  }
 }
 
-// 1) Helper: should we show feedback?
-function shouldAskFeedback(isBadTranslation) {
-  // 1.1) If they’ve opted out forever…
+function shouldAskFeedback(isBad = false) {
+  // 1) Opt-out check
   if (localStorage.getItem("feedbackOptOut") === "true") {
+    console.log("🚫 opted out");
     return false;
   }
 
-  // 1.2) Only ask on “bad” translations
-  //     (assumes you return data.confidence [0–1] in your JSON)
-  if (typeof isBadTranslation === "boolean" && !isBadTranslation) {
-    return false;
-  }
-
-  // 1.3) Cap per session at 3
-  const maxPerSession = 3;
+  // 2) Read current count
   let count = parseInt(sessionStorage.getItem("feedbackCount") || "0", 10);
-  if (count >= maxPerSession) {
+  console.log(`🔢 Current feedbackCount: ${count}`);
+
+  // 3) Cap at 3
+  if (count >= 3) {
+    console.log("⛔️ reached max per session");
     return false;
   }
 
-  // 1.4) Exponential back-off: 30%, 20%, 10%
+  // 4) Exponential back-off
   const chances = [0.3, 0.2, 0.1];
-  const chance = chances[count] || 0;
-  if (Math.random() < chance) {
+  let chance = chances[count] ?? 0;
+
+  // 5) Increase chance for low-confidence translations
+  // if (isBad) {
+  //   chance = Math.min(chance * 2, 1.0);
+  //   console.log(`⚠️ Low confidence! Adjusted chance to: ${chance}`);
+  // }
+
+  const roll = Math.random();
+  console.log(`🎲 Roll=${roll.toFixed(3)} < Chance=${chance}?`);
+
+  // 6) Decide and conditionally increment
+  if (roll < chance) {
     sessionStorage.setItem("feedbackCount", count + 1);
+    console.log("👉 shouldAskFeedback returns true");
     return true;
   }
 
+  console.log("👉 shouldAskFeedback returns false");
   return false;
 }
 

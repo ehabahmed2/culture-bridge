@@ -36,8 +36,6 @@ def feedback(request):
             fb.save()
 
             # 6) Return success back to JS
-            messages.success(request, 'Thanks for the feedback')
-
             return JsonResponse({"success": True})
 
         # Form was invalid
@@ -56,7 +54,6 @@ def feedback(request):
             except Session.DoesNotExist:
                 fb.session = None
             fb.save()
-            messages.success(request, "Thank you for your feedback!")
             return redirect("feedback")  # or wherever you want to go
 
 
