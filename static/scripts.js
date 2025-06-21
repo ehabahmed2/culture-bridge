@@ -114,7 +114,6 @@ function setupTranslationForm() {
   const loader = translateBtn.querySelector(".loader");
 
   // read auth state out of a data-attr since this file isn’t templated
-  // — make sure your <form> has: data-user-authenticated="{{ user.is_authenticated|yesno:"true,false" }}"
   const userAuthenticated =
     translationForm.dataset.userAuthenticated === "true";
 
@@ -168,6 +167,12 @@ function setupTranslationForm() {
             creditsCounter.className =
               "text-sm font-medium px-3 py-1 rounded-full bg-green-100 text-green-800";
         }
+      }
+      if (Math.random() < 0.2) {
+        const inputText = document.querySelector('textarea[name="text"]').value;
+        const outputText = data.translation;
+        const dialect = document.querySelector('select[name="dialect"]').value;
+        showFeedbackPopup(inputText, outputText, dialect);
       }
     } catch (err) {
       console.error("Translation error:", err);
@@ -581,6 +586,112 @@ function getApproval() {
   }
 }
 
+// Feedback pop out
+function showFeedbackPopup(inputText, outputText, dialect) {
+  const popup = document.getElementById("feedback-popup");
+  popup.classList.remove("hidden");
+
+  // Reset UI
+  popup.querySelectorAll(".rating-star").forEach((star) => {
+    star.classList.remove("bg-blue-500", "text-white");
+  });
+  document.getElementById("feedback-comments").value = "";
+}
+
+function feedbackFunction() {
+  const popup = document.getElementById("feedback-popup");
+  if (!popup) return;
+
+  function hideFeedbackPopup() {
+    document.getElementById("feedback-popup").classList.add("hidden");
+  }
+
+  // Star rating interaction
+  popup.querySelectorAll(".rating-star").forEach((star) => {
+    star.addEventListener("click", function () {
+      const rating = this.dataset.rating;
+
+      // Update UI
+      popup.querySelectorAll(".rating-star").forEach((s) => {
+        if (parseInt(s.dataset.rating) <= parseInt(rating)) {
+          s.classList.add("bg-blue-500", "text-white");
+        } else {
+          s.classList.remove("bg-blue-500", "text-white");
+        }
+      });
+    });
+  });
+
+  // Close buttons
+  document
+    .getElementById("close-feedback-popup")
+    .addEventListener("click", hideFeedbackPopup);
+  document
+    .getElementById("cancel-feedback")
+    .addEventListener("click", hideFeedbackPopup);
+
+  // Submit feedback from popup
+  document
+    .getElementById("submit-feedback-popup")
+    .addEventListener("click", async function () {
+      const popup = document.getElementById("feedback-popup");
+
+      const selectedStars = document.querySelectorAll(
+        ".rating-star.bg-blue-500"
+      );
+      const selectedRating = selectedStars.length
+        ? selectedStars[selectedStars.length - 1].dataset.rating
+        : null;
+
+      if (!selectedRating) {
+        alert("Please select a rating");
+        return;
+      }
+
+      const comments = document.getElementById("feedback-comments").value;
+
+      try {
+        // grab it once
+        const saveUrl =
+          document.getElementById("feedback-popup").dataset.saveUrl;
+        const response = await fetch(saveUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]")
+              .value,
+          },
+          body: JSON.stringify({
+            input_text: popup.dataset.inputText,
+            output_text: popup.dataset.outputText,
+            dialect: popup.dataset.dialect,
+            rating: selectedRating,
+            comments: comments,
+          }),
+        });
+
+        if (response.ok) {
+          hideFeedbackPopup();
+          // Show thank you toast
+          const toast = document.createElement("div");
+          toast.className =
+            "fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg";
+          toast.textContent = "Thank you for your feedback!";
+          document.body.appendChild(toast);
+          setTimeout(() => toast.remove(), 3000);
+        } else {
+          alert("Failed to submit feedback. Please try again.");
+        }
+      } catch (error) {
+        console.error("Feedback submission error:", error);
+        alert("Network error. Please try again.");
+      }
+    });
+
+  // Show feedback popup occasionally after translation
+  // Add this to your translation success handler
+}
+
 // INITIALIZE EVERYTHING WHEN DOM LOADS
 document.addEventListener("DOMContentLoaded", function () {
   setupCultureSelection();
@@ -597,6 +708,7 @@ document.addEventListener("DOMContentLoaded", function () {
   navBar();
   warnUser();
   getApproval();
+  feedbackFunction();
 
   // Set Egyptian as default culture
   const egyptianPill = document.querySelector(
