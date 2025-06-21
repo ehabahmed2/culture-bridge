@@ -168,7 +168,9 @@ function setupTranslationForm() {
               "text-sm font-medium px-3 py-1 rounded-full bg-green-100 text-green-800";
         }
       }
-      if (Math.random() < 0.2) {
+
+      const isBad = data.confidence != null && data.confidence < 0.5;
+      if (data.success && shouldAskFeedback(isBad)) {
         const inputText = document.querySelector('textarea[name="text"]').value;
         const outputText = data.translation;
         const dialect = document.querySelector('select[name="dialect"]').value;
@@ -689,7 +691,37 @@ function feedbackFunction() {
     });
 
   // Show feedback popup occasionally after translation
-  // Add this to your translation success handler
+}
+
+// 1) Helper: should we show feedback?
+function shouldAskFeedback(isBadTranslation) {
+  // 1.1) If they’ve opted out forever…
+  if (localStorage.getItem("feedbackOptOut") === "true") {
+    return false;
+  }
+
+  // 1.2) Only ask on “bad” translations
+  //     (assumes you return data.confidence [0–1] in your JSON)
+  if (typeof isBadTranslation === "boolean" && !isBadTranslation) {
+    return false;
+  }
+
+  // 1.3) Cap per session at 3
+  const maxPerSession = 3;
+  let count = parseInt(sessionStorage.getItem("feedbackCount") || "0", 10);
+  if (count >= maxPerSession) {
+    return false;
+  }
+
+  // 1.4) Exponential back-off: 30%, 20%, 10%
+  const chances = [0.3, 0.2, 0.1];
+  const chance = chances[count] || 0;
+  if (Math.random() < chance) {
+    sessionStorage.setItem("feedbackCount", count + 1);
+    return true;
+  }
+
+  return false;
 }
 
 // INITIALIZE EVERYTHING WHEN DOM LOADS
