@@ -47,6 +47,22 @@
     .share-btn-container {
         position: relative;
     }
+    .preserve-whitespace {
+    white-space: pre-wrap;       /* Preserve whitespace and line breaks */
+    word-wrap: break-word;       /* Break long words if needed */
+    overflow-wrap: break-word;   /* Modern alternative to word-wrap */
+    line-height: 1.7;            /* Improve readability with more spacing */
+    font-size: 1.1rem;           /* Slightly larger font for readability */
+    padding: 0.5rem;             /* Add some padding */
+    background-color: #f8fafc;   /* Light background for better contrast */
+    border-radius: 0.25rem;      /* Soft rounded corners */
+    margin-top: 0.5rem;          /* Space from the header */
+    }
+    [dir="rtl"] .preserve-whitespace {
+    text-align: right;
+    font-size: 1.2rem;
+    line-height: 1.9;
+    }
 </style>
 
 <body class="bg-gray-50 font-sans antialiased">
@@ -242,6 +258,9 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
                                     </svg>
                                 </button>
+
+
+
                                 <div id="save-consent-message" 
                                     class="save-consent-message hidden absolute top-full right-0 mt-2 w-64 bg-white shadow-lg rounded-lg p-4 border border-gray-200 z-50">
                                     <p class="text-sm text-gray-700 mb-2">
@@ -256,7 +275,7 @@
                                 {% endif %}
                             </div>
                         </div>
-                        <p id="translation-output" class="text-gray-700"  style="unicode-bidi: plaintext; text-align: start;">Your culturally adapted message will appear here...</p>
+                        <p id="translation-output" class="text-gray-700 preserve-whitespace"  style="unicode-bidi: plaintext; text-align: start;">Your culturally adapted message will appear here...</p>
                         <div id="copy-success" class="absolute top-3 right-10 bg-green-100 text-green-800 text-xs px-2 py-1 rounded hidden">
                             Copied!
                         </div>

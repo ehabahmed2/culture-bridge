@@ -307,58 +307,6 @@ function setupSaveButton() {
   const saveBtn = document.getElementById("save-btn");
   const saveSuccess = document.getElementById("save-success");
   if (!saveBtn) return;
-  // read the actual URL from the data attribute
-  const saveUrl = saveBtn.dataset.saveUrl;
-
-  saveBtn.addEventListener("click", async () => {
-    // re-query dialectSelect here so it’s never undefined
-    const dialectSelect = document.getElementById("dialect-select");
-    if (!dialectSelect) {
-      console.error("dialect-select element not found");
-      return;
-    }
-
-    const inputText = document.querySelector('textarea[name="text"]').value;
-    const outputText =
-      document.getElementById("translation-output").textContent;
-    const targetCulture =
-      dialectSelect.options[dialectSelect.selectedIndex].text;
-
-    if (!outputText || outputText.startsWith("Your culturally")) return;
-
-    const originalHTML = saveBtn.innerHTML;
-    saveBtn.innerHTML = '<span class="loader"></span>';
-
-    try {
-      const response = await fetch(saveUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]")
-            .value,
-        },
-        body: JSON.stringify({
-          input_text: inputText,
-          output_text: outputText,
-          target_culture: targetCulture,
-        }),
-      });
-      if (response.ok) {
-        saveSuccess.classList.remove("hidden");
-        setTimeout(() => saveSuccess.classList.add("hidden"), 3000);
-      }
-    } catch (e) {
-      console.error("Save translation error", e);
-    } finally {
-      saveBtn.innerHTML = originalHTML;
-    }
-  });
-}
-
-function setupSaveButton() {
-  const saveBtn = document.getElementById("save-btn");
-  const saveSuccess = document.getElementById("save-success");
-  if (!saveBtn) return;
 
   const saveUrl = saveBtn.dataset.saveUrl;
 
@@ -418,6 +366,51 @@ function setupSaveButton() {
       alert("Network error. Please try again.");
     } finally {
       saveBtn.innerHTML = originalHTML;
+    }
+  });
+}
+
+// 3. SHARE MENU
+function setupShareMenu() {
+  const shareBtn = document.getElementById("share-btn");
+  const shareMenu = document.getElementById("share-menu");
+  if (!shareBtn || !shareMenu) return;
+
+  shareBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    shareMenu.style.display =
+      shareMenu.style.display === "block" ? "none" : "block";
+  });
+
+  document.querySelectorAll(".share-option").forEach((opt) => {
+    opt.addEventListener("click", () => {
+      const platform = opt.dataset.platform;
+      const text = document.getElementById("translation-output").textContent;
+      if (!text || text.startsWith("Your culturally")) return;
+
+      let url = "";
+      if (platform === "twitter")
+        url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+          text
+        )}`;
+      if (platform === "facebook")
+        url = `https://www.facebook.com/sharer/sharer.php?u=&quote=${encodeURIComponent(
+          text
+        )}`;
+      if (platform === "linkedin")
+        url = `https://www.linkedin.com/sharing/share-offsite/?url=&summary=${encodeURIComponent(
+          text
+        )}`;
+
+      window.open(url, "_blank", "width=600,height=400");
+      shareMenu.style.display = "none";
+    });
+  });
+
+  // close on outside click
+  document.addEventListener("click", (e) => {
+    if (!shareBtn.contains(e.target) && !shareMenu.contains(e.target)) {
+      shareMenu.style.display = "none";
     }
   });
 }
