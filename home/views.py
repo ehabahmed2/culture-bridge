@@ -85,15 +85,29 @@ def translate_view(request):
 def save_translation(request):
     if request.method == 'POST':
         try:
+            # get data from the form
             data = json.loads(request.body)
-            # Create and save history entry
-            TransalationHistory.objects.create(
-                user=request.user,
+            
+            # check if the data exists
+            if TransalationHistory.objects.filter(
+                user = request.user,
                 input_text=data['input_text'],
                 output_text=data['output_text'],
                 target_culture=data['target_culture']
-            )
-            return JsonResponse({'status': 'success'})
+            ).exists(): 
+                return JsonResponse({ # if it does exist then return an errors
+                    'status': 'info',
+                    'message': 'This translation is already saved in your history'
+                })
+            else: 
+                # Create and save history entry
+                TransalationHistory.objects.create(
+                    user=request.user,
+                    input_text=data['input_text'],
+                    output_text=data['output_text'],
+                    target_culture=data['target_culture']
+                )
+                return JsonResponse({'status': 'success'})
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
     return JsonResponse({'status': 'error'}, status=405)

@@ -54,6 +54,7 @@ def feedback(request):
             except Session.DoesNotExist:
                 fb.session = None
             fb.save()
+            messages.success(request, 'Thanks for the feedback!')
             return redirect("feedback")  # or wherever you want to go
 
 
