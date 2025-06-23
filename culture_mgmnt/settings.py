@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'plans.apps.PlansConfig',
     't_history.apps.THistoryConfig',
     'feedback.apps.FeedbackConfig',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

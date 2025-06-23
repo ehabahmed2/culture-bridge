@@ -14,61 +14,37 @@
   </div>
 
   <!-- Credit Card Form -->
-  <div id="credit-card" class="payment-form active">
-    <form method="POST" class="card-form" id="cardForm">
-      {% csrf_token %}
-      <input type="hidden" name="card_submit" value="1">
-      
-      <div class="form-group">
-        {{ card_form.card_number.label_tag }}
-        <div class="input-with-icon">
-          <i class="fab fa-cc-visa"></i>
-          {{ card_form.card_number }}
-        </div>
-        {% if card_form.card_number.errors %}
-          <div class="error">{{ card_form.card_number.errors }}</div>
-        {% endif %}
-      </div>
+<div id="credit-card" class="payment-form active">
+  <form method="POST" class="card-form" id="cardForm">
+    {% csrf_token %}
+    <input type="hidden" name="payment_method_id" id="paymentMethodId">
 
-      <div class="form-row">
-        <div class="form-group">
-          {{ card_form.expiry_date.label_tag }}
-          {{ card_form.expiry_date }}
-          {% if card_form.expiry_date.errors %}
-            <div class="error">{{ card_form.expiry_date.errors }}</div>
-          {% endif %}
-        </div>
-        
-        <div class="form-group">
-          {{ card_form.cvc.label_tag }}
-          <div class="input-with-icon">
-            {{ card_form.cvc }}
-            <i class="fas fa-question-circle" title="3 digits on back of card"></i>
-          </div>
-          {% if card_form.cvc.errors %}
-            <div class="error">{{ card_form.cvc.errors }}</div>
-          {% endif %}
-        </div>
-      </div>
+    <div class="form-group">
+      <label for="card-element">Credit or debit card</label>
+      <div id="card-element"><!-- Stripe Element will go here --></div>
+      <div id="card-errors" role="alert"></div>
+    </div>
 
-      <div class="form-group">
-        {{ card_form.card_name.label_tag }}
-        {{ card_form.card_name }}
-        {% if card_form.card_name.errors %}
-          <div class="error">{{ card_form.card_name.errors }}</div>
-        {% endif %}
-      </div>
+    <div class="form-group">
+      {{ card_form.card_name.label_tag }}
+      {{ card_form.card_name }}
+      {% if card_form.card_name.errors %}
+        <div class="error">{{ card_form.card_name.errors }}</div>
+      {% endif %}
+    </div>
 
-      <div class="form-group">
-        {{ card_form.credit_amount.label_tag }}
-        {{ card_form.credit_amount }}
-      </div>
+    <div class="form-group">
+      {{ card_form.credit_amount.label_tag }}
+      {{ card_form.credit_amount }}
+    </div>
 
-      <button type="submit" class="payment-btn" style="background: var(--culture-american)">
-        <i class="fas fa-lock"></i> Pay Securely
-      </button>
-    </form>
-  </div>
+    <button type="submit" class="payment-btn" style="background: var(--culture-american)">
+      <i class="fas fa-lock"></i> Pay Securely
+    </button>
+  </form>
+</div>
+
+
 
   <!-- Vodafone Cash Form -->
   <div id="vodafone" class="payment-form">
@@ -111,6 +87,64 @@
     <p>This is a simulated payment experience for demonstration purposes only.</p>
   </div>
 </div>
+
+
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+  // Use key from Django context
+  var stripe = Stripe('pk_test_51RdALCGaPghUexWG0iD8wGIsxN22T3G774LOFQa7a88NU9mJkfsJabtJOr54Nr1MEdcurT7FThhGQ2LN68qNFZOa00pc0R5q8M');
+  var elements = stripe.elements();
+  
+  var cardElement = elements.create('card', {
+    style: {
+      base: {
+        fontSize: '16px',
+        color: '#32325d',
+      }
+    }
+  });
+  cardElement.mount('#card-element');
+
+  // Handle real-time validation errors
+  cardElement.on('change', function(event) {
+    var displayError = document.getElementById('card-errors');
+    if (event.error) {
+      displayError.textContent = event.error.message;
+    } else {
+      displayError.textContent = '';
+    }
+  });
+
+  var form = document.getElementById('cardForm');
+  form.addEventListener('submit', async function(event) {
+    event.preventDefault();
+    
+    // Disable submit button
+    var submitBtn = form.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Processing...';
+    
+    // Create payment method
+    const { paymentMethod, error } = await stripe.createPaymentMethod({
+      type: 'card',
+      card: cardElement,
+      billing_details: {
+        name: document.getElementById('id_card_name').value
+      }
+    });
+
+    if (error) {
+      var errorElement = document.getElementById('card-errors');
+      errorElement.textContent = error.message;
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<i class="fas fa-lock"></i> Pay Securely';
+    } else {
+      // Add payment method ID to form and submit
+      document.getElementById('paymentMethodId').value = paymentMethod.id;
+      form.submit();
+    }
+  });
+</script>
 
 {% include "footer.html" %}
 {% endblock %}
