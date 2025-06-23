@@ -1,6 +1,10 @@
 from django.shortcuts import render, redirect
 from .forms import CardPaymentForm, VodafonePaymentForm
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
+from .models import Transaction
+
 from dotenv import load_dotenv
 import stripe
 import os
@@ -15,6 +19,10 @@ def plans(request):
 
 def payment(request):
     # get the forms from forms.py
+    if not request.user.is_authenticated: 
+        messages.info(request, 'You have to log in first!')
+        return redirect('login')
+    
     card_form = CardPaymentForm(request.POST or None)
     vodafone_form = VodafonePaymentForm(request.POST or None)
 
@@ -48,6 +56,19 @@ def payment(request):
 
             # check if payment went through
             if payment_intent['status'] == 'succeeded':
+                # Get the user model instance properly
+                User = get_user_model()
+                user = User.objects.get(id=request.user.id)
+                # update credits
+                user.credits += int(credit_amount)
+                user.save()
+                
+                # Create transaction record
+                Transaction.objects.create(
+                    user=user,
+                    amount=int(credit_amount),
+                    description=f"Stripe payment for {credit_amount} credits"
+                )
                 messages.success(request, "Thanks for the payment, enjoy our service. :)")
                 return redirect('payment_success')
             else: 
@@ -62,6 +83,6 @@ def payment(request):
             return redirect('payment')
     return render(request, 'fake-payment.html', context={'card_form': card_form, 'vodafone_form': vodafone_form})
 
-
+@login_required
 def payment_success(request):
     return render(request, 'payment_success.html')
