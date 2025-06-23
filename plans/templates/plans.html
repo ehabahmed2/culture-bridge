@@ -14,8 +14,38 @@
         <p class="renewal-info">Last renewal: <span id="lastRenewal">{{ credit.last_renewal|date:"M d, Y H:i" }}</span></p>
     </div>
     
-    <div style="text-align: center;">
-        <button id="purchaseBtn">Buy More Credits</button>
+    <h3 class="section-title">Choose a Credit Package</h3>
+    <div class="plans-container">
+        <form method="post" action="{% url 'plans' %}">
+            {% csrf_token %}
+            
+            <!-- Plan 1 -->
+            <label class="credit-plan">
+                <input type="radio" name="credit_plan" value="100" required>
+                <div class="plan-card">
+                    <div class="plan-credits">100 Credits</div>
+                    <div class="plan-price">$1.99</div>
+                    <div class="plan-description">Perfect for casual users</div>
+                </div>
+            </label>
+            
+            <!-- Plan 2 -->
+            <label class="credit-plan">
+                <input type="radio" name="credit_plan" value="500">
+                <div class="plan-card plan-popular">
+                    <div class="plan-badge">Best Value</div>
+                    <div class="plan-credits">500 Credits</div>
+                    <div class="plan-price">$7.99</div>
+                    <div class="plan-description">Save 20% per credit</div>
+                </div>
+            </label>
+            
+            <div class="purchase-footer">
+                <button type="submit" class="purchase-btn">
+                    Purchase Selected Credits
+                </button>
+            </div>
+        </form>
     </div>
     
     <h3 class="section-title">Transaction History</h3>
@@ -44,40 +74,5 @@
         </tbody>
     </table>
 </div>
-
-<!-- Purchase Modal -->
-{% comment %} <div id="purchaseModal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2>Buy More Credits</h2>
-            <button class="close-modal">&times;</button>
-        </div>
-        <div class="packages-container">
-            <div class="credit-package" data-credits="100" data-price="1.99">
-                <div class="package-credits">100</div>
-                <div class="package-price">$1.99</div>
-                <div class="package-bonus">Standard</div>
-            </div>
-            <div class="credit-package" data-credits="500" data-price="7.99">
-                <div class="package-credits">500</div>
-                <div class="package-price">$7.99</div>
-                <div class="package-bonus">Save 20%</div>
-            </div>
-            <div class="credit-package" data-credits="1000" data-price="12.99">
-                <div class="package-credits">1000</div>
-                <div class="package-price">$12.99</div>
-                <div class="package-bonus">Save 35%</div>
-            </div>
-            <div class="credit-package" data-credits="2500" data-price="24.99">
-                <div class="package-credits">2500</div>
-                <div class="package-price">$24.99</div>
-                <div class="package-bonus">Save 50%</div>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button id="confirmPurchase">Confirm Purchase</button>
-        </div>
-    </div>
-</div> {% endcomment %}
 {% include "footer.html" %}
 {% endblock %}

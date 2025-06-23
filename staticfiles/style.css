@@ -762,192 +762,200 @@ input.error {
 /* plans ___________ */
 
 
-
+/* ===== CREDIT DASHBOARD ===== */
 #creditDashboard {
-    max-width: 1200px;
-    margin: 40px auto;
-    padding: 30px;
-    background-color: var(--credit-bg);
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: var(--credit-bg);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
 }
 
-.credit-header {
-    text-align: center;
-    margin-bottom: 40px;
-    position: relative;
-}
-
-.credit-header::after {
-    content: '';
-    position: absolute;
-    bottom: -15px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80px;
-    height: 4px;
-    background: linear-gradient(90deg, var(--culture-egyptian), var(--culture-japanese), var(--culture-brazilian));
-    border-radius: 2px;
+.credit-header h2 {
+  text-align: center;
+  color: var(--credit-text);
+  margin-bottom: 2rem;
+  font-size: 1.8rem;
+  font-weight: 600;
 }
 
 #creditBalanceCard {
-    background: var(--credit-card-bg);
-    border-radius: 15px;
-    padding: 30px;
-    margin: 0 auto 40px;
-    max-width: 600px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-}
-
-#creditBalanceCard::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 6px;
-    background: linear-gradient(90deg, 
-        var(--culture-american), 
-        var(--culture-japanese), 
-        var(--culture-egyptian));
+  background: var(--credit-card-bg);
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  border: 1px solid rgba(0,0,0,0.05);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.03);
 }
 
 #balanceValue {
-    font-size: 3.5rem;
-    font-weight: 700;
-    margin: 20px 0;
-    background: linear-gradient(
-    135deg,
-    var(--culture-american),
-    var(--culture-indian)
-  );
-    -webkit-background-clip: text;
-
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--credit-accent);
+  margin: 0.5rem 0;
 }
 
 .renewal-info {
-    color: #6b7280;
-    font-size: 0.95rem;
-    margin-top: 10px;
-}
-
-#purchaseBtn {
-    display: inline-block;
-    background: linear-gradient(135deg, var(--culture-american), var(--culture-indian));
-    color: white;
-    padding: 14px 36px;
-    border-radius: 50px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    box-shadow: 0 10px 25px rgba(58, 134, 255, 0.3);
-    border: none;
-    cursor: pointer;
-    margin: 20px 0 40px;
-}
-
-#purchaseBtn:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 35px rgba(58, 134, 255, 0.4);
+  color: #6b7280;
+  font-size: 0.9rem;
+  margin: 0.3rem 0;
 }
 
 .section-title {
-    text-align: center;
-    font-size: 1.8rem;
-    margin-bottom: 30px;
-    color: var(--credit-text);
-    position: relative;
+  color: var(--credit-text);
+  margin: 2rem 0 1rem;
+  font-size: 1.3rem;
+  text-align: center;
 }
 
-.section-title::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 3px;
-    background: var(--culture-egyptian);
-    border-radius: 2px;
+/* ===== CREDIT PLANS ===== */
+.plans-container {
+  margin: 2rem 0;
 }
 
+.credit-plan {
+  display: block;
+  margin-bottom: 1.5rem;
+}
+
+.credit-plan input[type="radio"] {
+  display: none;
+}
+
+.plan-card {
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  transition: all 0.3s;
+  position: relative;
+  background: white;
+  cursor: pointer;
+}
+
+.plan-popular {
+  border-color: var(--culture-brazilian);
+  transform: scale(1.02);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.plan-badge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--culture-japanese);
+  color: white;
+  padding: 0.3rem 1.5rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.credit-plan input[type="radio"]:checked + .plan-card {
+  border-color: var(--culture-egyptian);
+  background: rgba(255, 190, 11, 0.05);
+  box-shadow: 0 0 0 3px rgba(255, 190, 11, 0.2);
+}
+
+.plan-credits {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--credit-text);
+  margin: 0.5rem 0;
+}
+
+.plan-price {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--culture-indian);
+  margin-bottom: 0.5rem;
+}
+
+.plan-description {
+  color: #6b7280;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+}
+
+.purchase-footer {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.purchase-btn {
+  background: var(--culture-brazilian);
+  color: white;
+  border: none;
+  padding: 1rem 2.5rem;
+  font-size: 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+  box-shadow: 0 4px 6px rgba(6, 214, 160, 0.3);
+}
+
+.purchase-btn:hover {
+  background: #05b893;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(6, 214, 160, 0.4);
+}
+
+/* ===== TRANSACTION TABLE ===== */
 #transactionTable {
-    width: 100%;
-    border-collapse: collapse;
-    background: var(--credit-card-bg);
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-}
-
-#transactionTable thead {
-    background: linear-gradient(90deg, var(--culture-american), var(--culture-saudi));
-    color: white;
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
 #transactionTable th {
-    padding: 18px 15px;
-    text-align: left;
-    font-weight: 600;
-}
-
-#transactionTable tbody tr {
-    border-bottom: 1px solid #e5e7eb;
-    transition: background-color 0.2s;
-}
-
-#transactionTable tbody tr:last-child {
-    border-bottom: none;
-}
-
-#transactionTable tbody tr:hover {
-    background-color: #f9fafb;
+  background: var(--culture-saudi);
+  color: white;
+  padding: 0.8rem;
+  text-align: left;
 }
 
 #transactionTable td {
-    padding: 16px 15px;
-    color: #4b5563;
+  padding: 0.8rem;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+#transactionTable tr:last-child td {
+  border-bottom: none;
 }
 
 .credit-positive {
-    color: var(--culture-brazilian);
-    font-weight: 600;
+  color: #10b981;
+  font-weight: 600;
 }
 
 .credit-negative {
-    color: var(--culture-japanese);
-    font-weight: 600;
+  color: #ef4444;
+  font-weight: 600;
 }
 
-/* Responsive styles */
-@media (max-width: 768px) {
-    #creditDashboard {
-        padding: 20px;
-        margin: 20px;
-    }
-    
-    #balanceValue {
-        font-size: 2.8rem;
-    }
-    
-    .packages-container {
-        grid-template-columns: 1fr;
-    }
-    
-    #transactionTable {
-        display: block;
-        overflow-x: auto;
-    }
+/* Responsive */
+@media (max-width: 600px) {
+  .plan-card {
+    padding: 1.2rem;
+  }
+  
+  .plan-credits,
+  .plan-price {
+    font-size: 1.5rem;
+  }
+  
+  .purchase-btn {
+    width: 100%;
+    padding: 1rem;
+  }
 }
-
-
 
 
 
