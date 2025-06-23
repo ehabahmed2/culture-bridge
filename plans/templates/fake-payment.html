@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block body %}
+{% include "nav.html" %}
+
+<div class="payment-container">
+  <h2 class="payment-title">Payment Checkout</h2>
+  
+  <!-- Payment Method Tabs -->
+  <div class="payment-method-tabs">
+    <button class="method-tab active" data-tab="credit-card">Credit Card</button>
+    <button class="method-tab" data-tab="vodafone">Vodafone Cash</button>
+  </div>
+
+  <!-- Credit Card Form -->
+  <div id="credit-card" class="payment-form active">
+    <form method="POST" class="card-form" id="cardForm">
+      {% csrf_token %}
+      <input type="hidden" name="card_submit" value="1">
+      
+      <div class="form-group">
+        {{ card_form.card_number.label_tag }}
+        <div class="input-with-icon">
+          <i class="fab fa-cc-visa"></i>
+          {{ card_form.card_number }}
+        </div>
+        {% if card_form.card_number.errors %}
+          <div class="error">{{ card_form.card_number.errors }}</div>
+        {% endif %}
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          {{ card_form.expiry_date.label_tag }}
+          {{ card_form.expiry_date }}
+          {% if card_form.expiry_date.errors %}
+            <div class="error">{{ card_form.expiry_date.errors }}</div>
+          {% endif %}
+        </div>
+        
+        <div class="form-group">
+          {{ card_form.cvc.label_tag }}
+          <div class="input-with-icon">
+            {{ card_form.cvc }}
+            <i class="fas fa-question-circle" title="3 digits on back of card"></i>
+          </div>
+          {% if card_form.cvc.errors %}
+            <div class="error">{{ card_form.cvc.errors }}</div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="form-group">
+        {{ card_form.card_name.label_tag }}
+        {{ card_form.card_name }}
+        {% if card_form.card_name.errors %}
+          <div class="error">{{ card_form.card_name.errors }}</div>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        {{ card_form.credit_amount.label_tag }}
+        {{ card_form.credit_amount }}
+      </div>
+
+      <button type="submit" class="payment-btn" style="background: var(--culture-american)">
+        <i class="fas fa-lock"></i> Pay Securely
+      </button>
+    </form>
+  </div>
+
+  <!-- Vodafone Cash Form -->
+  <div id="vodafone" class="payment-form">
+    <form method="POST" class="vodafone-form" id="vodafoneForm">
+      {% csrf_token %}
+      <input type="hidden" name="vodafone_submit" value="1">
+      
+      <div class="form-group">
+        {{ vodafone_form.mobile_number.label_tag }}
+        <div class="input-with-icon">
+          <i class="fas fa-mobile-alt"></i>
+          {{ vodafone_form.mobile_number }}
+        </div>
+        {% if vodafone_form.mobile_number.errors %}
+          <div class="error">{{ vodafone_form.mobile_number.errors }}</div>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        {{ vodafone_form.credit_amount.label_tag }}
+        {{ vodafone_form.credit_amount }}
+      </div>
+
+      <div class="form-group">
+        {{ vodafone_form.pin.label_tag }}
+        {{ vodafone_form.pin }}
+        {% if vodafone_form.pin.errors %}
+          <div class="error">{{ vodafone_form.pin.errors }}</div>
+        {% endif %}
+      </div>
+
+      <button type="submit" class="payment-btn" style="background: var(--culture-egyptian)">
+        <i class="fas fa-wallet"></i> Pay with Vodafone Cash
+      </button>
+    </form>
+  </div>
+
+  <div class="payment-disclaimer">
+    <i class="fas fa-info-circle"></i>
+    <p>This is a simulated payment experience for demonstration purposes only.</p>
+  </div>
+</div>
+
+{% include "footer.html" %}
+{% endblock %}

@@ -767,6 +767,34 @@ function shouldAskFeedback(isBad = false) {
   return false;
 }
 
+// Payment secion
+function paymentDetails() {
+  const tabs = document.querySelectorAll(".method-tab");
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      tabs.forEach((t) => t.classList.remove("active"));
+      tab.classList.add("active");
+
+      document.querySelectorAll(".payment-form").forEach((form) => {
+        form.classList.remove("active");
+      });
+      document.getElementById(tab.dataset.tab).classList.add("active");
+    });
+  });
+
+  // Input formatting
+  const cardNumber = document.getElementById("cardNumber");
+  if (cardNumber) {
+    cardNumber.addEventListener("input", function (e) {
+      let value = e.target.value.replace(/\s+/g, "");
+      if (value.length > 0) {
+        value = value.match(new RegExp(".{1,4}", "g")).join(" ");
+      }
+      e.target.value = value;
+    });
+  }
+}
+
 // INITIALIZE EVERYTHING WHEN DOM LOADS
 document.addEventListener("DOMContentLoaded", function () {
   setupCultureSelection();
@@ -784,6 +812,7 @@ document.addEventListener("DOMContentLoaded", function () {
   warnUser();
   getApproval();
   feedbackFunction();
+  paymentDetails();
 
   // Set Egyptian as default culture
   const egyptianPill = document.querySelector(
