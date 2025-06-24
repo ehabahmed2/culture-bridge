@@ -1330,3 +1330,212 @@ color: var(--culture-japanese);
 }
 }
 
+
+
+
+/* Change Password Specific Styles ______________________________________________ */
+.change-password-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 160px);
+    padding: 2rem 1rem;
+    background-color: var(--credit-bg);
+}
+
+.change-password-card {
+    background: var(--credit-card-bg);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    max-width: 450px;
+    padding: 2.5rem;
+    margin: 0 auto;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.change-password-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.change-password-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.change-password-subtitle {
+    font-size: 1rem;
+    color: var(--credit-text);
+    opacity: 0.7;
+    margin-bottom: 1.5rem;
+}
+
+.change-password-form-group {
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.change-password-form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--credit-text);
+    font-size: 0.9rem;
+}
+
+.change-password-form-group input {
+    width: 100%;
+    padding: 0.9rem 1.2rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.2s;
+    background-color: #fff;
+}
+
+.change-password-form-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(58, 134, 255, 0.15);
+}
+
+.password-toggle {
+    position: absolute;
+    right: 12px;
+    top: 38px;
+    background: none;
+    border: none;
+    color: var(--credit-text);
+    opacity: 0.6;
+    cursor: pointer;
+    font-size: 0.85rem;
+    padding: 0.5rem;
+}
+
+.password-toggle:hover {
+    opacity: 1;
+}
+
+.password-strength {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+}
+
+.password-strength-meter {
+    height: 4px;
+    flex-grow: 1;
+    background: #e2e8f0;
+    border-radius: 2px;
+    margin: 0 0.5rem;
+    overflow: hidden;
+}
+
+.password-strength-fill {
+    height: 100%;
+    width: 0;
+    transition: width 0.3s;
+}
+
+.password-strength-text {
+    min-width: 60px;
+    text-align: right;
+    font-weight: 500;
+}
+
+.change-password-submit-btn {
+    width: 100%;
+    padding: 1rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 1rem;
+}
+
+.change-password-submit-btn:hover {
+    background-color: #2a75e6;
+}
+
+.change-password-footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+    color: var(--credit-text);
+}
+
+.change-password-footer a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.change-password-footer a:hover {
+    text-decoration: underline;
+}
+
+.password-requirements {
+    background-color: #f8fafc;
+    border-left: 3px solid var(--primary-color);
+    padding: 0.75rem 1rem;
+    border-radius: 0 8px 8px 0;
+    margin-top: 1rem;
+    font-size: 0.85rem;
+}
+
+.password-requirements h4 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--credit-text);
+}
+
+.password-requirements ul {
+    margin: 0;
+    padding-left: 1.2rem;
+}
+
+.password-requirements li {
+    margin-bottom: 0.3rem;
+    color: var(--credit-text);
+    opacity: 0.8;
+}
+
+.password-requirements li.valid {
+    color: #166534;
+}
+
+.error-message {
+    color: #b91c1c;
+    background-color: #fef2f2;
+    border: 1px solid #fecaca;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+}
+
+.error-message svg {
+    margin-right: 0.5rem;
+    flex-shrink: 0;
+}
+
+@media (max-width: 480px) {
+    .change-password-card {
+        padding: 1.5rem;
+    }
+    
+    .change-password-title {
+        font-size: 1.5rem;
+    }
+}

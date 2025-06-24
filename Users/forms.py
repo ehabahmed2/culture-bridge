@@ -1,6 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm, SetPasswordForm
 from .models import CustomUser
 from django.utils import timezone
 
@@ -121,3 +120,26 @@ class UserUpdate(UserChangeForm):
             'id': 'registerFullName',
             'placeholder': 'Enter your full name'
         })
+
+
+class UpdatePassword(SetPasswordForm):
+    """Updating password form"""
+    class Meta:
+        model = CustomUser
+        fields = ['new_password1', 'new_password2']
+        
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            
+            self.fields['new_password1'].widget.attrs.update({
+                'class': 'register-input',
+                'id': 'id_new_password1',
+                'placeholder': 'Enter new password',
+                
+            })
+            self.fields['new_password2'].widget.attrs.update({
+                'class': 'register-input',
+                'id': 'id_new_password2',
+                'placeholder': 'Confirm new password'
+            })
+            

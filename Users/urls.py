@@ -7,6 +7,7 @@ urlpatterns = [
     path('logout/', views.logout_keep_free_attempts, name='logout'),
     path('register/', views.register_user, name='register'),
     path('login/', views.login_user, name='login'),
+    path('change-password/', views.change_password_form, name='change_password_form'),
     path('user-info/', views.user_info, name='user_info'),
     path('enable_history/', views.enable_history_storage, name='enable_history_storage'),
 ]

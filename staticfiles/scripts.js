@@ -795,6 +795,115 @@ function paymentDetails() {
   }
 }
 
+// Update Password ____________
+
+function updatePassword() {
+  // Password toggle functionality
+  const toggleButtons = document.querySelectorAll(".password-toggle");
+  toggleButtons.forEach((button) => {
+    button.addEventListener("click", function () {
+      const targetId = this.getAttribute("data-target");
+      const input = document.getElementById(targetId);
+      if (input.type === "password") {
+        input.type = "text";
+        this.textContent = "Hide";
+      } else {
+        input.type = "password";
+        this.textContent = "Show";
+      }
+    });
+  });
+
+  // Password strength meter
+  const passwordInput = document.getElementById("id_new_password1");
+  const strengthFill = document.getElementById("passwordStrengthFill");
+  const strengthText = document.getElementById("passwordStrengthText");
+  const confirmPasswordInput = document.getElementById("id_new_password2");
+  const matchIndicator = document.getElementById("passwordMatchIndicator");
+
+  passwordInput.addEventListener("input", function () {
+    const password = this.value;
+    const strength = calculatePasswordStrength(password);
+
+    // Update strength meter
+    strengthFill.style.width = strength.percentage + "%";
+    strengthFill.style.backgroundColor = strength.color;
+    strengthText.textContent = strength.text;
+    strengthText.style.color = strength.color;
+
+    // Update requirement indicators
+    updateRequirement("length", password.length >= 8);
+    updateRequirement("upper", /[A-Z]/.test(password));
+    updateRequirement("lower", /[a-z]/.test(password));
+    updateRequirement("number", /\d/.test(password));
+    updateRequirement("special", /[^A-Za-z0-9]/.test(password));
+  });
+
+  // Password match indicator
+  confirmPasswordInput.addEventListener("input", function () {
+    const password1 = passwordInput.value;
+    const password2 = this.value;
+
+    if (password2.length === 0) {
+      matchIndicator.textContent = "";
+      matchIndicator.className = "";
+    } else if (password1 === password2) {
+      matchIndicator.textContent = "✓ Passwords match";
+      matchIndicator.style.color = "#166534";
+    } else {
+      matchIndicator.textContent = "✗ Passwords do not match";
+      matchIndicator.style.color = "#b91c1c";
+    }
+  });
+
+  function calculatePasswordStrength(password) {
+    let strength = 0;
+    let text = "Weak";
+    let color = "#e63946"; // Red
+    let percentage = 0;
+
+    if (password.length >= 8) strength += 20;
+    if (password.length >= 12) strength += 10;
+    if (/[A-Z]/.test(password)) strength += 15;
+    if (/[a-z]/.test(password)) strength += 15;
+    if (/\d/.test(password)) strength += 15;
+    if (/[^A-Za-z0-9]/.test(password)) strength += 25;
+
+    percentage = Math.min(100, strength);
+
+    if (percentage >= 80) {
+      text = "Strong";
+      color = "#06d6a0"; // Green
+    } else if (percentage >= 50) {
+      text = "Medium";
+      color = "#ffbe0b"; // Yellow
+    }
+
+    return { percentage, text, color };
+  }
+
+  function updateRequirement(id, isValid) {
+    const element = document.getElementById("req-" + id);
+    if (isValid) {
+      element.classList.add("valid");
+    } else {
+      element.classList.remove("valid");
+    }
+  }
+
+  //   // Form submission feedback
+  //   const form = document.getElementById("passwordForm");
+  //   if (form) {
+  //     form.addEventListener("submit", function () {
+  //       const submitBtn = this.querySelector(".change-password-submit-btn");
+  //       if (submitBtn) {
+  //         submitBtn.innerHTML = "Updating...";
+  //         submitBtn.disabled = true;
+  //       }
+  //     });
+  //   }
+}
+
 // INITIALIZE EVERYTHING WHEN DOM LOADS
 document.addEventListener("DOMContentLoaded", function () {
   setupCultureSelection();
@@ -813,6 +922,7 @@ document.addEventListener("DOMContentLoaded", function () {
   getApproval();
   feedbackFunction();
   paymentDetails();
+  updatePassword();
 
   // Set Egyptian as default culture
   const egyptianPill = document.querySelector(

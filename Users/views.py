@@ -7,12 +7,13 @@ from django.views.decorators.http import require_POST
 from django.contrib.auth import get_user_model 
 from t_history.models import TransalationHistory
 from django.utils import timezone
+from .forms import loginForm, RegisterForm, UserUpdate, UpdatePassword
+
 
 
 # change from built in user to Custom user 
 User = get_user_model()
 
-from .forms import loginForm, RegisterForm, UserUpdate
 
 def register_user(request):
     if request.method == 'POST':
@@ -56,6 +57,26 @@ def login_user(request):
         form = loginForm()
     return render(request, 'login.html', {'form': form})
 
+
+def change_password_form(request):
+    # check if user is auth
+    if request.user.is_authenticated:
+        # get current user
+        current_user = request.user
+        # if user is auth, then create the form with the user instance
+        form = UpdatePassword(request.user, request.POST or None)
+        if request.method == 'POST':
+            # check if the form is valid
+            if form.is_valid():
+                # save the new password
+                form.save()
+                messages.success(request, 'Your password has been changed successfully!')
+                return redirect('user_info')
+            else:
+                for error in list(form.errors.values()):
+                    messages.error(request, f"There is an error: {error}" )
+                    return redirect('change_password_form')
+    return render(request, 'change_password_form.html', {'form': form})
 
 
 @login_required
