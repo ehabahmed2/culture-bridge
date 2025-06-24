@@ -84,7 +84,9 @@
                 <div class="privacy-setting">
                     <h3>Privacy Settings</h3>
                     <div class="flex items-center">
+                        <div class="mt-1">
                         {{ form.store_history }}  <!-- Use form field instead of manual input -->
+                        </div>
                         <label for="{{ form.store_history.id_for_label }}" class="ml-2">
                             Store my translation history
                         </label>
@@ -109,6 +111,10 @@
                 {% endif %}
                 <button type="submit" class="register-submit-btn">Update</button>
             </form>
+                <div class="register-login-link mb-4">
+                    Want to reset your password? <a href="{% url "change_password_form" %}" class="register-login-link-text">Reset Password</a>
+                </div>
+
         </div>
     </div>
     {% include "footer.html" %}

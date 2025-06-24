@@ -4,233 +4,236 @@
 {% load static %}
 
 {% include "nav.html" %}
-    <style>
-        /* Updated color scheme for solo founder */
-        :root {
-            --primary-color: #3a86ff;
-            --secondary-color: #ffbe0b;
-            --accent-color: #06d6a0;
-            --text-color: #1f2937;
-            --background-color: #f9fafb;
-            --card-bg: #ffffff;
-        }
-
-        .about-body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            line-height: 1.6;
-        }
-
-        .about-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .about-section {
-            padding: 80px 0;
-        }
-
-        .about-section-title {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        .about-section-title::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
-            border-radius: 2px;
-        }
-
-        .about-section-subtitle {
-            text-align: center;
-            font-size: 1.2rem;
-            max-width: 700px;
-            margin: 0 auto 50px;
-            color: #4b5563;
-        }
-
-        /* Hero Section */
-        .about-hero {
-            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
-            color: white;
-            padding: 100px 0;
-            text-align: center;
-        }
-
-        .about-hero-title {
-            font-size: 3.5rem;
-            margin-bottom: 20px;
-        }
-
-        .about-hero-subtitle {
-            font-size: 1.5rem;
-            margin-bottom: 30px;
-            font-weight: 300;
-        }
-
-        .about-mission-statement {
-            background-color: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 30px;
-            margin: 40px auto;
-            max-width: 700px;
-        }
-
-        /* Values Section */
-        .about-values-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 50px;
-        }
-
-        .about-value-card {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease;
-            text-align: center;
-        }
-
-        .about-value-card:hover {
-            transform: translateY(-10px);
-        }
-
-        /* Founder Section */
-        .about-founder-card {
-            max-width: 600px;
-            margin: 0 auto;
-            background: var(--card-bg);
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 40px 20px;
-            text-align: center;
-        }
-
-        .about-founder-image {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
-            margin-bottom: 25px;
-        }
-
-        .about-founder-name {
-            font-size: 1.8rem;
-            margin-bottom: 10px;
-        }
-
-        .about-founder-title {
-            color: var(--primary-color);
-            font-weight: 600;
-            margin-bottom: 20px;
-        }
-
-        /* Vision Section */
-        .about-vision-section {
-            background: linear-gradient(to bottom right, #f0f7ff, #e0f2fe);
-        }
-
-        .about-vision-content {
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        /* Progress Section */
-        .about-progress-container {
-            max-width: 800px;
-            margin: 50px auto 0;
-        }
-
-        .about-progress-item {
-            margin-bottom: 40px;
-        }
-
-        .about-progress-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .about-progress-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: rgba(58, 134, 255, 0.1);
-            color: var(--primary-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 15px;
-        }
-
-        .about-progress-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-        }
-
-        /* CTA Section */
-        .about-cta {
-            text-align: center;
-            padding: 80px 0;
-        }
-
-        .about-cta-title {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-        }
-
-        .about-cta-subtitle {
-            font-size: 1.2rem;
-            max-width: 600px;
-            margin: 0 auto 40px;
-            color: #4b5563;
-        }
-
-        .about-cta-button {
-            display: inline-block;
-            background: var(--primary-color);
-            color: white;
-            padding: 15px 40px;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .about-cta-button:hover {
-            transform: translateY(-5px);
-            background: #2563eb;
-        }
-
-        @media (max-width: 768px) {
-            .about-hero-title {
-                font-size: 2.5rem;
+    <head>
+        <title>About Culture Bridge</title>
+        <style>
+            /* Updated color scheme for solo founder */
+            :root {
+                --primary-color: #3a86ff;
+                --secondary-color: #ffbe0b;
+                --accent-color: #06d6a0;
+                --text-color: #1f2937;
+                --background-color: #f9fafb;
+                --card-bg: #ffffff;
             }
+
+            .about-body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background-color: var(--background-color);
+                color: var(--text-color);
+                line-height: 1.6;
+            }
+
+            .about-container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 0 20px;
+            }
+
             .about-section {
-                padding: 60px 0;
+                padding: 80px 0;
             }
-        }
-    </style>
-    
+
+            .about-section-title {
+                text-align: center;
+                font-size: 2.5rem;
+                margin-bottom: 20px;
+                position: relative;
+            }
+
+            .about-section-title::after {
+                content: '';
+                position: absolute;
+                bottom: -10px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 80px;
+                height: 4px;
+                background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+                border-radius: 2px;
+            }
+
+            .about-section-subtitle {
+                text-align: center;
+                font-size: 1.2rem;
+                max-width: 700px;
+                margin: 0 auto 50px;
+                color: #4b5563;
+            }
+
+            /* Hero Section */
+            .about-hero {
+                background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+                color: white;
+                padding: 100px 0;
+                text-align: center;
+            }
+
+            .about-hero-title {
+                font-size: 3.5rem;
+                margin-bottom: 20px;
+            }
+
+            .about-hero-subtitle {
+                font-size: 1.5rem;
+                margin-bottom: 30px;
+                font-weight: 300;
+            }
+
+            .about-mission-statement {
+                background-color: rgba(255, 255, 255, 0.1);
+                backdrop-filter: blur(10px);
+                border-radius: 15px;
+                padding: 30px;
+                margin: 40px auto;
+                max-width: 700px;
+            }
+
+            /* Values Section */
+            .about-values-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 30px;
+                margin-top: 50px;
+            }
+
+            .about-value-card {
+                background: var(--card-bg);
+                border-radius: 15px;
+                padding: 30px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+                transition: transform 0.3s ease;
+                text-align: center;
+            }
+
+            .about-value-card:hover {
+                transform: translateY(-10px);
+            }
+
+            /* Founder Section */
+            .about-founder-card {
+                max-width: 600px;
+                margin: 0 auto;
+                background: var(--card-bg);
+                border-radius: 15px;
+                overflow: hidden;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 40px 20px;
+                text-align: center;
+            }
+
+            .about-founder-image {
+                width: 150px;
+                height: 150px;
+                border-radius: 50%;
+                background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+                margin-bottom: 25px;
+            }
+
+            .about-founder-name {
+                font-size: 1.8rem;
+                margin-bottom: 10px;
+            }
+
+            .about-founder-title {
+                color: var(--primary-color);
+                font-weight: 600;
+                margin-bottom: 20px;
+            }
+
+            /* Vision Section */
+            .about-vision-section {
+                background: linear-gradient(to bottom right, #f0f7ff, #e0f2fe);
+            }
+
+            .about-vision-content {
+                max-width: 800px;
+                margin: 0 auto;
+                text-align: center;
+            }
+
+            /* Progress Section */
+            .about-progress-container {
+                max-width: 800px;
+                margin: 50px auto 0;
+            }
+
+            .about-progress-item {
+                margin-bottom: 40px;
+            }
+
+            .about-progress-header {
+                display: flex;
+                align-items: center;
+                margin-bottom: 15px;
+            }
+
+            .about-progress-icon {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                background: rgba(58, 134, 255, 0.1);
+                color: var(--primary-color);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-right: 15px;
+            }
+
+            .about-progress-title {
+                font-size: 1.3rem;
+                font-weight: 600;
+            }
+
+            /* CTA Section */
+            .about-cta {
+                text-align: center;
+                padding: 80px 0;
+            }
+
+            .about-cta-title {
+                font-size: 2.5rem;
+                margin-bottom: 20px;
+            }
+
+            .about-cta-subtitle {
+                font-size: 1.2rem;
+                max-width: 600px;
+                margin: 0 auto 40px;
+                color: #4b5563;
+            }
+
+            .about-cta-button {
+                display: inline-block;
+                background: var(--primary-color);
+                color: white;
+                padding: 15px 40px;
+                border-radius: 50px;
+                font-size: 1.1rem;
+                font-weight: 600;
+                text-decoration: none;
+                transition: all 0.3s ease;
+            }
+
+            .about-cta-button:hover {
+                transform: translateY(-5px);
+                background: #2563eb;
+            }
+
+            @media (max-width: 768px) {
+                .about-hero-title {
+                    font-size: 2.5rem;
+                }
+                .about-section {
+                    padding: 60px 0;
+                }
+            }
+        </style>
+    </head>
+    <body>
     <!-- Hero Section -->
     <section class="about-hero">
         <div class="about-container">
@@ -355,5 +358,5 @@
             <p style="margin-top: 20px; color: #6b7280;">or <a href="#" style="color: var(--primary-color); text-decoration: none;">Follow our progress</a></p>
         </div>
     </section>
-
+    </body>
 {% endblock body %}

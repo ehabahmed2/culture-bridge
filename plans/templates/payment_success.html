@@ -2,6 +2,9 @@
 {% extends "base.html" %}
 
 {% block body %}
+<head>
+    <title>Payment Success | Culture Connect</title>
+</head>
 <style>
     .success-container {
     text-align: center;
@@ -28,10 +31,12 @@
     100% { transform: scale(1); opacity: 1; }
     }
 </style>
+<body>
 <div class="success-container">
   <div class="success-icon">✓</div>
   <h2>Payment Successful!</h2>
   <p>Your credits have been added to your account.</p>
   <a href="{% url 'home' %}" class="btn">Go Home</a>
 </div>
+</body>
 {% endblock %}

@@ -1,6 +1,100 @@
 {% extends "base.html" %}
 
 {% block body %}
+<head>
+    <title>Plans | Culture Connect</title>
+    <style>
+        /* Toast Notification Styles */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #ffffff;
+            color: #065f46;
+            padding: 18px 25px;
+            border-radius: 8px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            border-left: 4px solid #10b981;
+        }
+        
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .toast-icon {
+            font-size: 1.4rem;
+            margin-right: 12px;
+            color: #10b981;
+        }
+        
+        .toast-message {
+            font-weight: 500;
+            font-size: 1rem;
+        }
+        
+        /* History Card Enhancements */
+        .history-card {
+            position: relative;
+            padding: 25px;
+            border-radius: 12px;
+            background: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 25px;
+        }
+        
+        .history-section {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        
+        .history-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .history-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .copy-btn {
+            background: #f0f7ff;
+            color: #3a86ff;
+            border: 1px solid #dbeafe;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+        }
+        
+        .copy-btn i {
+            margin-right: 5px;
+        }
+        
+        .copy-btn:hover {
+            background: #3a86ff;
+            color: white;
+        }
+        
+
+
+    </style>
+</head>
+<body>
 {% include "nav.html" %}
 
 <!-- Toast Notification Container -->
@@ -75,96 +169,6 @@
     {% endif %}
 </div>
 
-<style>
-    /* Toast Notification Styles */
-    .toast {
-        position: fixed;
-        bottom: 30px;
-        right: 30px;
-        background: #ffffff;
-        color: #065f46;
-        padding: 18px 25px;
-        border-radius: 8px;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-        z-index: 1000;
-        transform: translateY(100px);
-        opacity: 0;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        border-left: 4px solid #10b981;
-    }
-    
-    .toast.show {
-        transform: translateY(0);
-        opacity: 1;
-    }
-    
-    .toast-icon {
-        font-size: 1.4rem;
-        margin-right: 12px;
-        color: #10b981;
-    }
-    
-    .toast-message {
-        font-weight: 500;
-        font-size: 1rem;
-    }
-    
-    /* History Card Enhancements */
-    .history-card {
-        position: relative;
-        padding: 25px;
-        border-radius: 12px;
-        background: white;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-        margin-bottom: 25px;
-    }
-    
-    .history-section {
-        margin-bottom: 20px;
-        padding-bottom: 20px;
-        border-bottom: 1px solid #f3f4f6;
-    }
-    
-    .history-section:last-child {
-        border-bottom: none;
-        margin-bottom: 0;
-        padding-bottom: 0;
-    }
-    
-    .history-header-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 10px;
-    }
-    
-    .copy-btn {
-        background: #f0f7ff;
-        color: #3a86ff;
-        border: 1px solid #dbeafe;
-        padding: 6px 12px;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 0.9rem;
-        transition: all 0.2s ease;
-        display: flex;
-        align-items: center;
-    }
-    
-    .copy-btn i {
-        margin-right: 5px;
-    }
-    
-    .copy-btn:hover {
-        background: #3a86ff;
-        color: white;
-    }
-    
-
-
-</style>
 
 <script>
     // Copy text to clipboard and show toast
@@ -210,5 +214,6 @@
         });
     });
 </script>
+</body>
 {% include "footer.html" %}
 {% endblock body %}

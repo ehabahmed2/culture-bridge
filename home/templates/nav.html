@@ -58,7 +58,6 @@
             <a href="{% url 'about' %}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 hover:border-gray-300 transition">
                 <i class="fas fa-info-circle mr-2"></i> About Us
             </a>
-            
             {% if not request.user.is_authenticated and request.path != '/user/register/' %}
             <a href="{% url 'register' %}" class="mobile-signup-btn block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:opacity-90 transition">
                 <i class="fas fa-user-plus mr-2"></i> Sign Up Free

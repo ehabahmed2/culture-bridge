@@ -1,70 +1,72 @@
 {% extends "base.html" %}
 {% block body %}
-<style>
-    optgroup {
-        font-weight: 600;
-        font-style: normal;
-        padding: 8px 0;
-    }
-    optgroup option {
-        font-weight: normal;
-        padding: 8px 16px;
-    }
+<head>
+    <title>CultureBridge | AI Cultural Translator</title>
+    <style>
+        optgroup {
+            font-weight: 600;
+            font-style: normal;
+            padding: 8px 0;
+        }
+        optgroup option {
+            font-weight: normal;
+            padding: 8px 16px;
+        }
 
-        .share-menu {
-        position: absolute;
-        top: 100%;
-        right: 0;
-        background: white;
-        border-radius: 8px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        padding: 10px;
-        display: none;
-        z-index: 10;
-        min-width: 150px;
-    }
-    
-    .share-option {
-        display: flex;
-        align-items: center;
-        padding: 8px 12px;
-        border-radius: 6px;
-        cursor: pointer;
-        transition: background-color 0.2s;
-    }
-    
-    .share-option:hover {
-        background-color: #f9fafb;
-    }
-    
-    .share-option i {
-        margin-right: 8px;
-        width: 20px;
-        text-align: center;
-    }
-    
-    /* Unique class for share button */
-    .share-btn-container {
-        position: relative;
-    }
-    .preserve-whitespace {
-    white-space: pre-wrap;       /* Preserve whitespace and line breaks */
-    word-wrap: break-word;       /* Break long words if needed */
-    overflow-wrap: break-word;   /* Modern alternative to word-wrap */
-    line-height: 1.7;            /* Improve readability with more spacing */
-    font-size: 1.1rem;           /* Slightly larger font for readability */
-    padding: 0.5rem;             /* Add some padding */
-    background-color: #f8fafc;   /* Light background for better contrast */
-    border-radius: 0.25rem;      /* Soft rounded corners */
-    margin-top: 0.5rem;          /* Space from the header */
-    }
-    [dir="rtl"] .preserve-whitespace {
-    text-align: right;
-    font-size: 1.2rem;
-    line-height: 1.9;
-    }
-</style>
-
+            .share-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            display: none;
+            z-index: 10;
+            min-width: 150px;
+        }
+        
+        .share-option {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .share-option:hover {
+            background-color: #f9fafb;
+        }
+        
+        .share-option i {
+            margin-right: 8px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        /* Unique class for share button */
+        .share-btn-container {
+            position: relative;
+        }
+        .preserve-whitespace {
+        white-space: pre-wrap;       /* Preserve whitespace and line breaks */
+        word-wrap: break-word;       /* Break long words if needed */
+        overflow-wrap: break-word;   /* Modern alternative to word-wrap */
+        line-height: 1.7;            /* Improve readability with more spacing */
+        font-size: 1.1rem;           /* Slightly larger font for readability */
+        padding: 0.5rem;             /* Add some padding */
+        background-color: #f8fafc;   /* Light background for better contrast */
+        border-radius: 0.25rem;      /* Soft rounded corners */
+        margin-top: 0.5rem;          /* Space from the header */
+        }
+        [dir="rtl"] .preserve-whitespace {
+        text-align: right;
+        font-size: 1.2rem;
+        line-height: 1.9;
+        }
+    </style>
+</head>
 <body class="bg-gray-50 font-sans antialiased">
     <!-- Navigation -->
      {% include "nav.html" %}

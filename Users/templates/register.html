@@ -73,8 +73,10 @@
                     {% endif %}
                 </div>
                   <!-- Add privacy consent checkbox -->
-                <div class="privacy-consent">
+                <div class="privacy-consent flex items-start">
+                    <div class="mt-1 mr-2">
                     {{form.store_history}}
+                    </div>
                     <label for="store_history">
                     I consent to having my translation history stored to improve my experience
                     <span class="text-xs text-gray-500">(You can change this anytime in settings)</span>

@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 
 {% block body %}
+<head>
+    <title>Feedback | Culture Connect</title>
+</head>
+<body>
 {% include "nav.html" %}
 <div class="max-w-4xl mx-auto py-12 px-4">
     <div class="bg-white rounded-xl shadow-xl p-8">
@@ -45,8 +49,9 @@
     </div>
     
     <div class="mt-12 text-center">
-        <p class="text-gray-600">Having technical issues? <a href="#" class="text-blue-600 hover:underline">Contact support</a></p>
+        <p class="text-gray-600">Having technical issues? <a href="{% url "contact_us" %}" class="text-blue-600 hover:underline">Contact support</a></p>
     </div>
 </div>
 {% include "footer.html" %}
+</body>
 {% endblock %}
