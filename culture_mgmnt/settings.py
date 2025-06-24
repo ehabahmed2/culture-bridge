@@ -57,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'Users.middleware.DailyCreditMiddleware',  # Custom middleware for daily credit updates
 ]
 
 ROOT_URLCONF = 'culture_mgmnt.urls'
