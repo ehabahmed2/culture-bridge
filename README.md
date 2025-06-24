@@ -7,7 +7,7 @@
 
 An AI-powered tool that rewrites social media posts in culturally appropriate tones and dialects, helping users localize content for global audiences. Built with Django and Google Gemini API.
 
-![App Screenshot](https://via.placeholder.com/800x400.png?text=AI+Cultural+Translator+Interface)
+![App Screenshot](https://i.postimg.cc/ydNn5vH2/2025-06-18-18-11-42-Window.png)
 
 ## 🚀 Project Overview
 
