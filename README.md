@@ -4,6 +4,7 @@
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://python.org)
 [![Stripe](https://img.shields.io/badge/Powered_by-Stripe-635BFF.svg?logo=stripe)](https://stripe.com)
 [![Gemini](https://img.shields.io/badge/Google_Gemini_API-0.1.0-orange.svg)](https://ai.google.dev/)
+[![Live Demo](https://img.shields.io/badge/demo-live-green.svg)](http://cultureBridge.pythonanywhere.com/)
 
 An AI-powered tool that rewrites social media posts in culturally appropriate tones and dialects, helping users localize content for global audiences. Built with Django and Google Gemini API.
 
