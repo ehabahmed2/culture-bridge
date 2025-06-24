@@ -61,8 +61,6 @@ def login_user(request):
 def change_password_form(request):
     # check if user is auth
     if request.user.is_authenticated:
-        # get current user
-        current_user = request.user
         # if user is auth, then create the form with the user instance
         form = UpdatePassword(request.user, request.POST or None)
         if request.method == 'POST':
