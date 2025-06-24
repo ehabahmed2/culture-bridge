@@ -32,8 +32,8 @@ Perfect for marketers, content creators, and global businesses looking to improv
 | Stripe payment integration | ✅ Done |
 | Loading spinner & error handling | ✅ Done |
 | Subscription plans | ✅ Done |
-| Rate-limiting for free users | 🚧 Planned |
-| Feedback form | ⚙️ Optional |
+| Rate-limiting for free users | ✅ Done |
+| Feedback form | ✅ Done |
 | Auto-post scheduling | ❌ Future |
 
 ## 📦 Tech Stack
