@@ -1,6 +1,6 @@
 # 🌐 AI Cultural Translator for Social Media
 
-[![Django](https://img.shields.io/badge/Django-3.2-green.svg)](https://www.djangoproject.com/)
+[![Django](https://img.shields.io/badge/Django==5.2.3-green.svg)](https://www.djangoproject.com/)
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://python.org)
 [![Stripe](https://img.shields.io/badge/Powered_by-Stripe-635BFF.svg?logo=stripe)](https://stripe.com)
 [![Gemini](https://img.shields.io/badge/Google_Gemini_API-0.1.0-orange.svg)](https://ai.google.dev/)
